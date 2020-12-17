@@ -27,7 +27,7 @@ int _log::write(std::string msg)	//write msg to logfile with time ISO9601
 	if(is_setting_up)
 	{
 		std::fstream myfile;
-		myfile.open(log::file, std::ios::out | std::ios::app | std::ios::ate); //write on the end of file
+		myfile.open(_log::file, std::ios::out | std::ios::app | std::ios::ate); //write on the end of file
 		if(myfile.good())// if file is correct open
 		{
 			time_t u = time(NULL);	//get unix time
