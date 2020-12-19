@@ -1,6 +1,7 @@
 #include <time.h>
 #include <string>
 #include <fstream>
+#include <thread>
 #include "log.hpp"
 
 int _log::setup(std::string filename)
@@ -26,7 +27,7 @@ int _log::write(std::string msg)	//write msg to logfile with time ISO9601
 {
 	if(is_setting_up)
 	{
-		std::fstream myfile;
+		pthread_mutex_lock(&lock);
 		myfile.open(_log::file, std::ios::out | std::ios::app | std::ios::ate); //write on the end of file
 		if(myfile.good())// if file is correct open
 		{
@@ -54,7 +55,12 @@ int _log::write(std::string msg)	//write msg to logfile with time ISO9601
 			myfile<<msg;
 			myfile<<"\n";
 			myfile.close();
+			pthread_mutex_unlock(&lock);
 			return 1;
+		}
+		else
+		{
+			pthread_mutex_unlock(&lock);
 		}
 	}
 	return 0;
