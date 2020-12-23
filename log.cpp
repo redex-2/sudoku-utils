@@ -31,8 +31,7 @@ int _log::write(std::string msg)	//write msg to logfile with time ISO9601
 		myfile.open(_log::file, std::ios::out | std::ios::app | std::ios::ate); //write on the end of file
 		if(myfile.good())// if file is correct open
 		{
-			time_t u = time(NULL);	//get unix time
-			struct tm * ptm; 	//create time struct
+			u = time(NULL);	//get unix time
 			ptm = gmtime ( &u );// set ptm to current time
 			
 			myfile<<ptm->tm_year+1900;
