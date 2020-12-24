@@ -57,10 +57,7 @@ int _log::write(std::string msg)	//write msg to logfile with time ISO9601
 			pthread_mutex_unlock(&lock);
 			return 1;
 		}
-		else
-		{
-			pthread_mutex_unlock(&lock);
-		}
+		pthread_mutex_unlock(&lock);
 	}
 	return 0;
 }
