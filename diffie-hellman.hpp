@@ -4,12 +4,11 @@
 class diffie_hellman
 {
 	private:
-		unsigned long long p = 0;
-		unsigned long long q = 0;
-		unsigned long long a = 0;
-		unsigned long long A = 0;
-		unsigned long long b = 0;
-		unsigned long long B = 0;
+		unsigned long long public_p = 0;
+		unsigned long long public_q = 0;
+		unsigned long long my_private = 0;
+		unsigned long long my_public = 0;
+		unsigned long long peer_public = 0;
 		unsigned long long secret = 0;
 	public:
 		
