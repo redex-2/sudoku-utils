@@ -1,8 +1,4 @@
 #include "des.hpp"
-#include <string>
-#include <cmath>
-#include <bitset>
-#include <iostream>
 
 void _des::split (unsigned long long in, unsigned int *left, unsigned int *right )
 {

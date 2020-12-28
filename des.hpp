@@ -1,8 +1,6 @@
 #ifndef des_hpp
 #define des_hpp
 
-#include <string>
-
 class _des
 {
 	private:
