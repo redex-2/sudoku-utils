@@ -10,15 +10,15 @@ void des::split (unsigned long long in, unsigned int *left, unsigned int *right 
 	*right=in&0xFFFFFFFF;
 }
 
-void des::splitKey (unsigned long long in, unsigned int *left, unsigned int *right )
+void des::split_key (unsigned long long in, unsigned int *left, unsigned int *right )
 {
 	*left = in>>28;
 	*right = in&0xFFFFFFF;
 }
 
-void des::genKeyTable(unsigned long long key, unsigned long long keys[16])
+void des::gen_key_array(unsigned long long key, unsigned long long keys[16])
 {
-	splitKey(first_key_permutation(key), &leftKey, &rightKey);
+	split_key(first_key_permutation(key), &leftKey, &rightKey);
 	for (j = 0; j < 16; j++)
 	{
 		if (j == 0 || j == 1 || j == 8 || j == 15) 
@@ -131,7 +131,7 @@ unsigned long long des::second_key_permutation( unsigned long long in )
 
 unsigned long long des::encrypt (unsigned long long in, unsigned long long key)
 {
-	genKeyTable(key, keys);
+	gen_key_array(key, keys);
 	split(first_permutation(in), &left, &right);
 	for (j = 0; j < 16; j++)
 	{
@@ -151,7 +151,7 @@ unsigned long long des::encrypt (unsigned long long in, unsigned long long key)
 
 unsigned long long des::decrypt (unsigned long long in, unsigned long long key)
 {
-	genKeyTable(key, keys);
+	gen_key_array(key, keys);
 	split(first_permutation(in), &left, &right);
 	for (j = 0; j < 16; j++)
 	{

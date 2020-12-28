@@ -40,8 +40,8 @@ class des
 		
 		
 		void split (unsigned long long, unsigned int *, unsigned int * );
-		void splitKey (unsigned long long, unsigned int *, unsigned int * );
-		void genKeyTable(unsigned long long, unsigned long long [16] );
+		void split_key (unsigned long long, unsigned int *, unsigned int * );
+		void gen_key_array(unsigned long long, unsigned long long [16] );
 		unsigned int sBox (unsigned long long);
 		
 		unsigned long long first_permutation( unsigned long long );
