@@ -26,20 +26,33 @@ class des
 		
 		unsigned int leftKey;
 		unsigned int rightKey;
-		unsigned long long key56;
+		unsigned int left;
+		unsigned int right;
+		unsigned int temp_right;
 		unsigned long long key48;
+		unsigned long long key56;
+		unsigned long long temp;
+		unsigned long long keys[16];
+		unsigned char row;
+		unsigned char col;
+		unsigned char i;
+		char j;
 		
-		int split (unsigned long long , unsigned int *, unsigned int * );
-		int sBox (unsigned long long, unsigned int *);
+		
+		void split (unsigned long long, unsigned int *, unsigned int * );
+		void splitKey (unsigned long long, unsigned int *, unsigned int * );
+		void genKeyTable(unsigned long long, unsigned long long [16] );
+		unsigned int sBox (unsigned long long);
 		
 		unsigned long long first_permutation( unsigned long long );
-		unsigned long long final_permutation( unsigned long long  );
+		unsigned long long final_permutation( unsigned long long );
 		unsigned long long expand_permutation( unsigned int );
 		unsigned int p_permutation( unsigned int );
 		unsigned long long first_key_permutation( unsigned long long );
 		unsigned long long second_key_permutation( unsigned long long );
 	public:
-		int encrypt (unsigned long long , unsigned long long, unsigned long long *);
+		unsigned long long encrypt (unsigned long long, unsigned long long );
+		unsigned long long decrypt (unsigned long long, unsigned long long );
 };
 
 #endif

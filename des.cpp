@@ -1,17 +1,175 @@
 #include "des.hpp"
-#include <cstring
+#include <string>
+#include <cmath>
+#include <bitset>
+#include <iostream>
+
+void des::split (unsigned long long in, unsigned int *left, unsigned int *right )
+{
+	*left=in>>32;
+	*right=in&0xFFFFFFFF;
+}
+
+void des::splitKey (unsigned long long in, unsigned int *left, unsigned int *right )
+{
+	*left = in>>28;
+	*right = in&0xFFFFFFF;
+}
+
+void des::genKeyTable(unsigned long long key, unsigned long long keys[16])
+{
+	splitKey(first_key_permutation(key), &leftKey, &rightKey);
+	for (j = 0; j < 16; j++)
+	{
+		if (j == 0 || j == 1 || j == 8 || j == 15) 
+		{
+			leftKey<<=1;
+			rightKey<<=1;
+		}
+		else 
+		{
+			leftKey<<=2;
+			rightKey<<=2;
+		}
+		leftKey |= leftKey >>28&3;
+		rightKey|= rightKey>>28&3;
+		leftKey &= 0x0FFFFFFF;
+		rightKey&= 0x0FFFFFFF;
+	
+		key56 = (unsigned long long)rightKey | (unsigned long long)leftKey<<28;
+		keys[j] = second_key_permutation(key56);
+	}
+}
+
+unsigned int des::sBox (unsigned long long input) {
+	temp = 0;
+	for (i = 0; i < 48; i += 6) {
+		row = (input>>(42-i)&1)  | ((input>>(47-i))&1)<<1;	
+		col = (input>>((43-i)))&0xF;
+		
+		if( i == 0 )
+			temp |= (s1[row][col]<<28);
+		else if( i == 6 )
+			temp |= (s2[row][col]<<24);
+		else if( i == 12 )
+			temp |= (s3[row][col]<<20);
+		else if( i == 18 )
+			temp |= (s4[row][col]<<16);
+		else if( i == 24 )
+			temp |= (s5[row][col]<<12);
+		else if( i == 30 )
+			temp |= (s6[row][col]<<8);
+		else if( i == 36 )
+			temp |= (s7[row][col]<<4);
+		else if( i == 42 )
+			temp |= (s8[row][col]);
+	}
+	return temp;
+}
+
+unsigned long long des::first_permutation( unsigned long long in )
+{
+	temp = 0;
+	for(i = 0; i < 64; i++)
+	{
+		temp|=((in>>(64-first_permutation_table[63-i]))&1)<<i;
+	}
+	return temp;
+}
+
+unsigned long long des::final_permutation( unsigned long long in )
+{
+	temp = 0;
+	for(i = 0; i < 64; i++)
+	{
+		temp|=((in>>(64-final_permutation_table[63-i]))&1)<<i;
+	}
+	return temp;
+}
+
+unsigned long long des::expand_permutation( unsigned int in )
+{
+	temp = 0;
+	for(i = 0; i < 48; i++)
+	{
+		temp|=(((unsigned long long)in>>(expanding_permutation_table[i]-1))&1)<<i;
+	}
+	return temp;
+}
+
+unsigned int des::p_permutation( unsigned int in )
+{
+	temp = 0;
+	for(i = 0; i < 32; i++)
+	{
+		temp|=((in>>(32-p_permutation_table[31-i]))&1)<<i;
+	}
+	return temp;
+}
+
+unsigned long long des::first_key_permutation( unsigned long long in )
+{
+	temp = 0;
+	for(i = 0; i < 56; i++)
+	{
+		temp|=((in>>(64-first_key_permutation_table[55-i]))&1)<<i;
+	}
+	return temp;
+}
 
 
+unsigned long long des::second_key_permutation( unsigned long long in )
+{
+	temp = 0;
+	for(i = 0; i < 48; i++)
+	{
+		temp|=((in>>(56-second_key_permutation_table[47-i]))&1)<<i;
+	}
+	return temp;
+}
 
 
+unsigned long long des::encrypt (unsigned long long in, unsigned long long key)
+{
+	genKeyTable(key, keys);
+	split(first_permutation(in), &left, &right);
+	for (j = 0; j < 16; j++)
+	{
+		temp_right = (p_permutation(sBox(expand_permutation(right)^keys[j])))^left;
+		if(j!=15)
+		{
+			left=right;
+			right=temp_right;
+		}
+		else
+		{
+			left=temp_right;
+		}
+	}
+	return final_permutation(((unsigned long long)left<<32)|right);
+}
 
+unsigned long long des::decrypt (unsigned long long in, unsigned long long key)
+{
+	genKeyTable(key, keys);
+	split(first_permutation(in), &left, &right);
+	for (j = 0; j < 16; j++)
+	{
+		temp_right = (p_permutation(sBox(expand_permutation(right)^keys[15-j])))^left;
+		if(j!=15)
+		{
+			left=right;
+			right=temp_right;
+		}
+		else
+		{
+			left=temp_right;
+		}
+	}
+	return final_permutation(((unsigned long long)left<<32)|right);
+}
 
-
-
-
-
-
-const short des::init_permutation[64]=
+const short des::first_permutation_table[64]=
 {
 	58, 50, 42, 34, 26, 18, 10,  2, 60, 52, 44, 36, 28, 20, 12,  4,
 	62, 54, 46, 38, 30, 22, 14,  6, 64, 56, 48, 40, 32, 24, 16,  8,
@@ -19,7 +177,7 @@ const short des::init_permutation[64]=
 	61, 53, 45, 37, 29, 21, 13,  5, 63, 55, 47, 39, 31, 23, 15,  7
 };
 
-const short des::final_permutation[64]=
+const short des::final_permutation_table[64]=
 {
 	40,  8, 48, 16, 56, 24, 64, 32, 39,  7, 47, 15, 55, 23, 63, 31,
 	38,  6, 46, 14, 54, 22, 62, 30, 37,  5, 45, 13, 53, 21, 61, 29,
@@ -27,7 +185,7 @@ const short des::final_permutation[64]=
 	34,  2, 42, 10, 50, 18, 58, 26, 33,  1, 41,  9, 49, 17, 57, 25
 };
 
-const short des::expanding_permutation[48]=
+const short des::expanding_permutation_table[48]=
 {
 	32,  1,  2,  3,  4,  5,  4,  5,  6,  7,  8,  9,
 	 8,  9, 10, 11, 12, 13, 12, 13, 14, 15, 16, 17,
@@ -36,8 +194,7 @@ const short des::expanding_permutation[48]=
 };
 
 
-
-const short des::first_key_permutation[56]=
+const short des::first_key_permutation_table[56]=
 {
 	57, 49, 41, 33, 25, 17,  9,  1, 58, 50, 42, 34, 26, 18, 
 	10,  2, 59, 51, 43, 35, 27, 19, 11,  3, 60, 52, 44, 36, 
@@ -46,7 +203,7 @@ const short des::first_key_permutation[56]=
 	14,  6, 61, 53, 45, 37, 29, 21, 13,  5, 28, 20, 12,  4
 };
 
-const short des::second_key_permutation[48]=
+const short des::second_key_permutation_table[48]=
 {
 	14, 17, 11, 24,  1,  5, 
 	 3, 28, 15,  6, 21, 10, 
@@ -58,10 +215,10 @@ const short des::second_key_permutation[48]=
 	46, 42, 50, 36, 29, 32
 };
 
-const short des::p_permutation[32]=
+const short des::p_permutation_table[32]=
 {
 	16,  7, 20, 21, 29, 12, 28, 17,
-	 1, 15, 23, 26, 05, 18, 31, 10,
+	 1, 15, 23, 26,  5, 18, 31, 10,
 	 2,  8, 24, 14, 32, 27,  3,  9,
 	19, 13, 30,  6, 22, 11,  4, 25
 };
@@ -70,7 +227,7 @@ const short des::p_permutation[32]=
 
 const short des::s1[4][16]=
 {
-	12,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7,
+	14,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7,
 	 0, 15,  7,  4, 14,  2, 13,  1, 10,  6, 12, 11,  9,  5,  3,  8,
 	 4,  1, 14,  8, 13,  6,  2, 11, 15, 12,  9,  7,  3, 10,  5,  0,
 	15, 12,  8,  2,  4,  9,  1,  7,  5, 11,  3, 14, 10,  0,  6, 13
@@ -79,7 +236,7 @@ const short des::s1[4][16]=
 const short des::s2[4][16]=
 {
 	15,  1,  8, 14,  6, 11,  3,  4,  9,  7,  2, 13, 12,  0,  5, 10,
-	 3, 13,  4,  7, 15,  2,  8, 14, 12,  0,  1, 12,  6,  9, 11,  5,
+	 3, 13,  4,  7, 15,  2,  8, 14, 12,  0,  1, 10,  6,  9, 11,  5,
 	 0, 14,  7, 11, 10,  4, 13,  1,  5,  8, 12,  6,  9,  3,  2, 15,
 	13,  8, 10,  1,  3, 15,  4,  2, 11,  6,  7, 12,  0,  5, 14,  9
 };
