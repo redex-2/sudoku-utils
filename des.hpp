@@ -3,7 +3,7 @@
 
 #include <string>
 
-class des
+class _des
 {
 	private:
 		
