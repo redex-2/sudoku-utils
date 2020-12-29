@@ -37,17 +37,17 @@ class _des
 		char j;
 		
 		
-		void split (unsigned long long, unsigned int *, unsigned int * );
-		void split_key (unsigned long long, unsigned int *, unsigned int * );
-		void gen_key_array(unsigned long long, unsigned long long [16] );
-		unsigned int sBox (unsigned long long);
+		void split ( const unsigned long long &, unsigned int *, unsigned int * );
+		void split_key ( const unsigned long long &, unsigned int *, unsigned int * );
+		void gen_key_array( const unsigned long long &, unsigned long long [16] );
+		unsigned int sBox ( const unsigned long long & );
 		
-		unsigned long long first_permutation( unsigned long long );
-		unsigned long long final_permutation( unsigned long long );
-		unsigned long long expand_permutation( unsigned int );
-		unsigned int p_permutation( unsigned int );
-		unsigned long long first_key_permutation( unsigned long long );
-		unsigned long long second_key_permutation( unsigned long long );
+		unsigned long long first_permutation( const unsigned long long & );
+		unsigned long long final_permutation( const unsigned long long & );
+		unsigned long long expand_permutation( const unsigned int & );
+		unsigned int p_permutation( const unsigned int & );
+		unsigned long long first_key_permutation( const unsigned long long & );
+		unsigned long long second_key_permutation( const unsigned long long & );
 	public:
 		unsigned long long encrypt (unsigned long long, unsigned long long );
 		unsigned long long decrypt (unsigned long long, unsigned long long );

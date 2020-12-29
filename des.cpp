@@ -1,18 +1,18 @@
 #include "des.hpp"
 
-void _des::split (unsigned long long in, unsigned int *left, unsigned int *right )
+void _des::split ( const unsigned long long &in, unsigned int *left, unsigned int *right )
 {
 	*left=in>>32;
 	*right=in&0xFFFFFFFF;
 }
 
-void _des::split_key (unsigned long long in, unsigned int *left, unsigned int *right )
+void _des::split_key ( const unsigned long long &in, unsigned int *left, unsigned int *right )
 {
 	*left = in>>28;
 	*right = in&0xFFFFFFF;
 }
 
-void _des::gen_key_array(unsigned long long key, unsigned long long keys[16])
+void _des::gen_key_array( const unsigned long long &key, unsigned long long keys[16])
 {
 	split_key(first_key_permutation(key), &leftKey, &rightKey);
 	for (j = 0; j < 16; j++)
@@ -37,7 +37,7 @@ void _des::gen_key_array(unsigned long long key, unsigned long long keys[16])
 	}
 }
 
-unsigned int _des::sBox (unsigned long long input) {
+unsigned int _des::sBox ( const unsigned long long &input ) {
 	temp = 0;
 	for (i = 0; i < 48; i += 6) {
 		row = (input>>(42-i)&1)  | ((input>>(47-i))&1)<<1;	
@@ -63,7 +63,7 @@ unsigned int _des::sBox (unsigned long long input) {
 	return temp;
 }
 
-unsigned long long _des::first_permutation( unsigned long long in )
+unsigned long long _des::first_permutation( const unsigned long long &in )
 {
 	temp = 0;
 	for(i = 0; i < 64; i++)
@@ -73,7 +73,7 @@ unsigned long long _des::first_permutation( unsigned long long in )
 	return temp;
 }
 
-unsigned long long _des::final_permutation( unsigned long long in )
+unsigned long long _des::final_permutation( const unsigned long long &in )
 {
 	temp = 0;
 	for(i = 0; i < 64; i++)
@@ -83,7 +83,7 @@ unsigned long long _des::final_permutation( unsigned long long in )
 	return temp;
 }
 
-unsigned long long _des::expand_permutation( unsigned int in )
+unsigned long long _des::expand_permutation( const unsigned int &in )
 {
 	temp = 0;
 	for(i = 0; i < 48; i++)
@@ -93,7 +93,7 @@ unsigned long long _des::expand_permutation( unsigned int in )
 	return temp;
 }
 
-unsigned int _des::p_permutation( unsigned int in )
+unsigned int _des::p_permutation( const unsigned int &in )
 {
 	temp = 0;
 	for(i = 0; i < 32; i++)
@@ -103,7 +103,7 @@ unsigned int _des::p_permutation( unsigned int in )
 	return temp;
 }
 
-unsigned long long _des::first_key_permutation( unsigned long long in )
+unsigned long long _des::first_key_permutation( const unsigned long long &in )
 {
 	temp = 0;
 	for(i = 0; i < 56; i++)
@@ -114,7 +114,7 @@ unsigned long long _des::first_key_permutation( unsigned long long in )
 }
 
 
-unsigned long long _des::second_key_permutation( unsigned long long in )
+unsigned long long _des::second_key_permutation( const unsigned long long &in )
 {
 	temp = 0;
 	for(i = 0; i < 48; i++)
