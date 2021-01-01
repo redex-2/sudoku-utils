@@ -60,7 +60,9 @@ int large_uint::comp(const large_uint &n) const
 		for (i = length-1; i >= n.length; i--)
 		{
 			if (value[i] != 0)
-			return 1;
+			{
+				return 1;
+			}
 		}
 	}
 	else if (n.length > length)
@@ -68,19 +70,29 @@ int large_uint::comp(const large_uint &n) const
 		for (i = n.length-1; i >= length; i--)
 		{
 			if (n.value[i] != 0)
-			return -1;
+			{
+				return -1;
+			}
 		}
 	}
 	else
-	i = length-1;
-	while (true)
+	{
+		i = length-1;
+	}
+	while (1)
 	{
 		if (value[i] > n.value[i])
-		return 1;
+		{
+			return 1;
+		}
 		if (value[i] < n.value[i])
-		return -1;
+		{
+			return -1;
+		}
 		if (i == 0)
-		return 0;
+		{
+			return 0;
+		}
 		i--;
 	}
 }
@@ -90,7 +102,9 @@ int large_uint::comp(uint32 n) const
 	for (uint16 i = length-1; i >= 1; i--)
 	{
 		if (value[i] != 0)
-		return 1;
+		{
+			return 1;
+		}
 	}
 	return value[0] > n ? 1 : value[0] < n ? -1 : 0;
 }
@@ -101,7 +115,9 @@ bool large_uint::zero(void) const
 	for (uint16 i = 0; i < length; i++)
 	{
 		if (value[i] != 0)
-		return false;
+		{
+			return false;
+		}
 	}
 	return true;
 }
@@ -112,7 +128,9 @@ uint16 large_uint::get_length(void)
 	for(int i = length-1; i >= 0; i--)
 	{
 		if(value[i]==0)
+		{
 			temp++;
+		}
 		else
 		{
 			break;
@@ -325,15 +343,14 @@ large_uint large_uint::pow(large_uint &exponent)
 
 large_uint large_uint::sqrt(void) //return floor value of this sqrt
 { 
-    if (*this == 0 || *this == 1) 
-    return *this;
+    if (*this == 0 || *this == 1) return *this;
 	
     large_uint i = 1;
 	large_uint result = 1; 
     while (result <= *this) 
     { 
-      i++; 
-      result = i * i; 
+		i++; 
+		result = i * i; 
     } 
     return i - 1; 
 } 
@@ -342,12 +359,13 @@ void large_uint::dump() const
 {
 	uint32 i;
 	std::cout<<std::hex<<"0x ";
+	std::streamsize w = std::cout.width( 8 );
 	for (i = 0; i < length; i++)
 	{
-		std::cout.width( 8 );
 		std::cout.fill( '0' );
 		std::cout<<value[length-1-i]<<" ";
 	}
+	std::cout.width( w );
 	std::cout<<std::dec<<std::endl;
 }
 
