@@ -10,6 +10,7 @@ class large_uint
 		uint16 length;
 		bool zero(void) const;
 		uint16 get_length(void);
+		uint16 get_length(const large_uint &);
 		
 		int comp(const large_uint &) const;
 		int comp(uint32) const;
@@ -32,19 +33,28 @@ class large_uint
 		void right_shift (const large_uint &);
 		void right_shift (const uint32 &);
 
+
+		void bit_and (const large_uint &);
+		void bit_and (const uint32 &);
+		
+		void bit_or (const large_uint &);
+		void bit_or (const uint32 &);
+		
+		void bit_xor (const large_uint &);
+		void bit_xor (const uint32 &);
+		
 	public:
 		large_uint(uint16);
 		large_uint(const large_uint &);
 		~large_uint();
-		void change_length(uint16);
 		
-		void set_last_uint32(uint32);
+		void change_length(uint16);
 		
 		void dump(void) const;
 		
-		static void pow( large_uint &,  large_uint &, large_uint &, large_uint &);
-		static void pow( large_uint &,  large_uint &, large_uint &);
-		//static void sqrt(const large_uint &, large_uint &);
+		large_uint pow(large_uint &, large_uint &);
+		large_uint pow(large_uint &);
+		large_uint sqrt(void);
 		
 		void operator = (const large_uint &);
 		void operator = (uint32);
@@ -62,15 +72,15 @@ class large_uint
 		
 		
 		large_uint operator &  (const large_uint &);
-		large_uint operator &  (const long &);
+		large_uint operator &  (const uint32 &);
 		large_uint operator |  (const large_uint &);
-		large_uint operator |  (const long &);
+		large_uint operator |  (const uint32 &);
 		large_uint operator ~  ();
 		large_uint operator ^  (const large_uint &);
-		large_uint operator ^  (const long &);
-		//large_uint operator << (const large_uint &);
+		large_uint operator ^  (const uint32 &);
+		large_uint operator << (const large_uint &);
 		large_uint operator << (const uint64 &);
-		//large_uint operator >> (const large_uint &);
+		large_uint operator >> (const large_uint &);
 		large_uint operator >> (const uint64 &);
 
 		bool operator && (const large_uint &) const;
@@ -89,16 +99,16 @@ class large_uint
 		large_uint  operator ++ (int);//postfix
 		large_uint  operator -- (int);
 
-		//void operator >>= (const large_uint &);
-		void operator >>= (const long &);
-		//void operator <<= (const large_uint &);
-		void operator <<= (const long &);
-		/*void operator &=  (const large_uint &);
-		void operator &=  (const long &);
+		void operator >>= (const large_uint &);
+		void operator >>= (const uint32 &);
+		void operator <<= (const large_uint &);
+		void operator <<= (const uint32 &);
+		void operator &=  (const large_uint &);
+		void operator &=  (const uint32 &);
 		void operator |=  (const large_uint &);
-		void operator |=  (const long &);
+		void operator |=  (const uint32 &);
 		void operator ^=  (const large_uint &);
-		void operator ^=  (const long &);*/
+		void operator ^=  (const uint32 &);
 
 		void operator += (const large_uint &);
 		void operator += (uint32);
@@ -126,26 +136,28 @@ class large_uint
 
 };
 
-/*large_uint operator + (const uint32&, const large_uint &);
-large_uint operator - (const uint32&, const large_uint &);
-large_uint operator / (const uint32&, const large_uint &);
-large_uint operator * (const uint32&, const large_uint &);
-large_uint operator % (const uint32&, const large_uint &);
 
-large_uint operator & (const uint32&, const large_uint &);
-large_uint operator | (const uint32&, const large_uint &);
-large_uint operator ^ (const uint32&, const large_uint &);
-large_uint operator << (const uint32&, const large_uint &);
-large_uint operator >> (const uint32&, const large_uint &);
+//to do:
+large_uint operator + (const uint32 &, const large_uint &);
+//large_uint operator - (const uint32 &, const large_uint &);
+//large_uint operator / (const uint32 &, const large_uint &);
+large_uint operator * (const uint32 &, const large_uint &);
+//large_uint operator % (const uint32 &, const large_uint &);
+
+//large_uint operator & (const uint32 &, const large_uint &);
+//large_uint operator | (const uint32 &, const large_uint &);
+//large_uint operator ^ (const uint32 &, const large_uint &);
+//large_uint operator << (const uint32 &, const large_uint &);
+//large_uint operator >> (const uint32 &, const large_uint &);
 
 bool operator && (const uint32&, const large_uint &);
 bool operator || (const uint32&, const large_uint &);
 
-uint32operator >>= (const uint32&, const large_uint &);
-uint32operator <<= (const uint32&, const large_uint &);
-uint32operator &= (const uint32&, const large_uint &);
-uint32operator |= (const uint32&, const large_uint &);
-uint32operator ^= (const uint32&, const large_uint &);*/
+//uint32 operator >>= (const uint32 &, const large_uint &);
+//uint32 operator <<= (const uint32 &, const large_uint &);
+//uint32 operator &= (const uint32 &, const large_uint &);
+//uint32 operator |= (const uint32 &, const large_uint &);
+//uint32 operator ^= (const uint32 &, const large_uint &);
 
 bool operator == (const uint32&, const large_uint &);
 bool operator != (const uint32&, const large_uint &);
