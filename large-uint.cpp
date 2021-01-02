@@ -357,7 +357,7 @@ large_uint large_uint::sqrt(void) //return floor value of this sqrt
 
 void large_uint::dump() const
 {
-	uint32 i;
+	uint16 i;
 	std::cout<<std::hex<<"0x ";
 	std::streamsize w = std::cout.width( 8 );
 	for (i = 0; i < length; i++)
