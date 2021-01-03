@@ -3,6 +3,7 @@
 
 large_uint::large_uint(uint16  bits)
 { 
+	if(bits == 0) throw;
 	length = (bits + 31) / 32; 
 	value = new uint32 [length]; 
 	for (uint16 i = 0; i < length; i++) value[i]=0;
