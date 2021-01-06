@@ -1,4 +1,4 @@
 # sudoku-encryption  
-Sudoku project module responsible for encryption  
+Sudoku project module responsible for cryptography  
 All rights reserved - redex-2  
 License details in LICENSE.md
