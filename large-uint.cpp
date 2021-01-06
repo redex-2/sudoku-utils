@@ -361,12 +361,15 @@ void large_uint::dump() const
 	uint16 i;
 	std::cout<<std::hex<<"0x ";
 	std::streamsize w = std::cout.width( 8 );
+	char f = std::cout.fill( '0' );
 	for (i = 0; i < length; i++)
 	{
+		std::cout.width( 8 );
 		std::cout.fill( '0' );
 		std::cout<<value[length-1-i]<<" ";
 	}
 	std::cout.width( w );
+	std::cout.fill( f );
 	std::cout<<std::dec<<std::endl;
 }
 
