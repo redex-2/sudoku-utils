@@ -1,13 +1,92 @@
 #include "sha-2.hpp"
 
-
-
-const unsigned int _sha2::h[8] =
+uint32 _sha2::rotate(uint32 data, uint16 num)
 {
-	0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
-};
+	return ((uint64)data<<32)>>num|(data>>num);
+}
 
-const unsigned int _sha2::k[64]=
+void _sha2::expand(void)
+{
+	for(i=16; i < 64; i++)
+	{
+		working[9] = rotate(word[i-15], 7) ^  rotate(word[i-15], 18) ^  (word[i-15] >> 3);
+		working[10] = rotate(word[i-2], 17) ^  rotate(word[i-2], 19) ^  (word[i-2] >> 10);
+		word[i] = word[i-16] +  working[9] +  word[i-7] +  working[10];
+	}
+}
+
+void _sha2::compression(void)
+{
+	working[0] = hash[0]; 
+	working[1] = hash[1]; 
+	working[2] = hash[2]; 
+	working[3] = hash[3]; 
+	working[4] = hash[4]; 
+	working[5] = hash[5]; 
+	working[6] = hash[6]; 
+	working[7] = hash[7];
+	for(i=0; i < 64 ;i++)
+	{
+		working[10] = rotate(working[4], 6) ^ rotate(working[4], 11) ^ rotate(working[4], 25);
+		working[11] = (working[4] & working[5]) ^ ((~working[4]) & working[6]);
+		working[13] = working[7] + working[10] + working[11] + k[i] + word[i];
+		working[9] = rotate(working[0], 2) ^ rotate(working[0], 13) ^ rotate(working[0], 22);
+		working[12] = (working[0] & working[1]) ^ (working[0] & working[2]) ^ (working[1] & working[2]);
+		working[14] = working[9] + working[12];
+		working[7] = working[6];
+		working[6] = working[5];
+		working[5] = working[4];
+		working[4] = working[3] + working[13];
+		working[3] = working[2];
+		working[2] = working[1];
+		working[1] = working[0];
+		working[0] = working[13] + working[14];
+	}
+	hash[0] += working[0];
+	hash[1] += working[1];
+	hash[2] += working[2];
+	hash[3] += working[3];
+	hash[4] += working[4];
+	hash[5] += working[5];
+	hash[6] += working[6];
+	hash[7] += working[7];
+}
+
+std::string _sha2::create(char *message, uint64 len)
+{
+	sstring.str(std::string());
+	
+	hash[0] = 0x6a09e667; 
+	hash[1] = 0xbb67ae85; 
+	hash[2] = 0x3c6ef372; 
+	hash[3] = 0xa54ff53a; 
+	hash[4] = 0x510e527f; 
+	hash[5] = 0x9b05688c; 
+	hash[6] = 0x1f83d9ab; 
+	hash[7] = 0x5be0cd19;
+	
+	_hash::split_message(message, len, data, out_len, block_size);
+	
+	for(j = 0; j < out_len; j++)
+	{
+		for(l = 0; l < 16; l++)
+		{
+			word[l]=*(*(data+l)+j);
+		}
+		expand();
+		compression();
+	}
+	
+	for (j = 0; j < 8; j++)
+	{
+		sstring.width( 8 );
+		sstring.fill( '0' );
+		sstring<<std::hex<<hash[j];
+	}
+	return sstring.str();
+}
+
+const uint32 _sha2::k[64]=
 {
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
 	0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
