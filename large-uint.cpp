@@ -29,11 +29,24 @@ void large_uint::change_length(uint16 n)
 	}
 	else if(n>length)
 	{
-		value = new uint32 [n-length]; 
-		for (uint16 i = length-1; i < n; i++)
+		uint32 *copy_of_value = new uint32[length];
+		for (uint16 i = 0; i < length; i++)
+		{
+			copy_of_value[i] = value[i];
+		}
+		delete [] value;
+		value = new uint32 [n]; 
+		
+		for (uint16 i = 0; i < length; i++)
+		{
+			value[i]=copy_of_value[i];
+		}
+		
+		for (uint16 i = length; i < n; i++)
 		{
 			value[i] = 0;
 		}
+		delete [] copy_of_value;
 		length=n;
 	}
 	else
@@ -50,6 +63,7 @@ void large_uint::change_length(uint16 n)
 			value[i]=copy_of_value[i];
 		}
 		delete [] copy_of_value;
+		length=n;
 	}
 }
 
