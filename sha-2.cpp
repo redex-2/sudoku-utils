@@ -1,11 +1,11 @@
 #include "sha-2.hpp"
 
-uint32 _sha2::rotate(uint32 data, uint16 num)
+uint32 _sha256::rotate(uint32 data, uint16 num)
 {
 	return ((uint64)data<<32)>>num|(data>>num);
 }
 
-void _sha2::expand(void)
+void _sha256::expand(void)
 {
 	for(i=16; i < 64; i++)
 	{
@@ -15,7 +15,7 @@ void _sha2::expand(void)
 	}
 }
 
-void _sha2::compression(void)
+void _sha256::compression(void)
 {
 	working[0] = hash[0]; 
 	working[1] = hash[1]; 
@@ -52,7 +52,7 @@ void _sha2::compression(void)
 	hash[7] += working[7];
 }
 
-std::string _sha2::create(char *message, uint64 len)
+std::string _sha256::create(char *message, uint64 len)
 {
 	sstring.str(std::string());
 	
@@ -86,7 +86,7 @@ std::string _sha2::create(char *message, uint64 len)
 	return sstring.str();
 }
 
-const uint32 _sha2::k[64]=
+const uint32 _sha256::k[64]=
 {
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
 	0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
