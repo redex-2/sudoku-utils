@@ -6,7 +6,7 @@
 #include "types.hpp"
 
 _des des;
-_sha2 sha2;
+_sha256 sha256;
 
 int main()
 {
@@ -24,7 +24,7 @@ int main()
 	else std::cout<<"decryption not work!\t"<<std::hex<<v<<std::endl;
 	
 	std::string sha0="8fc32d0d087d03115b7b200631109d66a60e052e434aa1609971130fa24d6d25";
-	std::string sha = sha2.create((char*)"worldogjnosafworldogjnosafworldogjnosafworldogjnosafworldogjnosafworldogjnosafworldogjnosafworldogjnosaf", 104);
+	std::string sha = sha256.create((char*)"worldogjnosafworldogjnosafworldogjnosafworldogjnosafworldogjnosafworldogjnosafworldogjnosafworldogjnosaf", 104);
 	if(sha==sha0)std::cout<<"sha256 ok!\t"<<std::hex<<sha<<std::endl;
 	else std::cout<<"sha256 not work!\t"<<std::hex<<sha<<std::endl;
 	

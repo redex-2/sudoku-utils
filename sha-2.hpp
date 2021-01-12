@@ -6,7 +6,7 @@
 #include "types.hpp"
 
 
-class _sha2:protected _hash
+class _sha256:protected _hash
 {
 	private:
 		static const uint32 k[64];
