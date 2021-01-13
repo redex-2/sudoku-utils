@@ -7,6 +7,7 @@
 
 _des des;
 _sha256 sha256;
+_md5 md5;
 
 int main()
 {
@@ -28,5 +29,10 @@ int main()
 	if(sha==sha0)std::cout<<"sha256 ok!\t"<<std::hex<<sha<<std::endl;
 	else std::cout<<"sha256 not work!\t"<<std::hex<<sha<<std::endl;
 	
+	std::string md0="9e107d9d372bb6826bd81d3542a419d6";
+	std::string md = md5.create((char*)"The quick brown fox jumps over the lazy dog", 43); 
+	if(md0==md)std::cout<<"md5 ok!\t"<<std::hex<<md<<std::endl;
+	else std::cout<<"md5 not work!\t"<<std::hex<<md<<std::endl;
+
 	return 0;
 }
