@@ -4,6 +4,7 @@
 #include "md-5.hpp"
 #include "sha-2.hpp"
 #include "types.hpp"
+#include "database.hpp"
 
 _des des;
 _sha256 sha256;
