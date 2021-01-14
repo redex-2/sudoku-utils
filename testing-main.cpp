@@ -36,7 +36,7 @@ int main()
 	//md5 test
 	std::string md0="9e107d9d372bb6826bd81d3542a419d6";
 	std::string md = md5.create((char*)"The quick brown fox jumps over the lazy dog", 43); 
-	if(md0==md)std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"md5\t"<<std::hex<<md<<std::endl;
+	if(md0==md)std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"md5\t\t"<<std::hex<<md<<std::endl;
 	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"md5\t\t"<<std::hex<<md<<std::endl;
 
 	return 0;
