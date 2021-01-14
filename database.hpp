@@ -9,17 +9,14 @@ class database
 {
 	private:
 		PGconn *conn;
-		std::string db_name;
-		std::string db_user;
-		std::string db_pass;
-		uint32      db_port;
-		std::string db_addr;
+		PGresult *res = NULL;
+		std::string conndata = "";
+		
 	public:
 		void setup(std::string db_name, std::string db_user, std::string db_pass, uint32 db_port, std::string db_addr);
-		int connect();
+		int connect(void);
 		
-		
-		int close();
+		void close(void);
 };
 
 #endif
