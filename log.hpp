@@ -3,7 +3,7 @@
 
 #include <cstring>
 #include <fstream>
-#include <thread>
+#include <mutex>
 
 class _log 
 {
@@ -11,7 +11,7 @@ class _log
 		std::string file="";
 		bool is_setting_up=0;
 		std::fstream myfile;
-		pthread_mutex_t lock;
+		std::mutex lock;
 		time_t u;
 		struct tm * ptm; 	//create time struct
 	public:

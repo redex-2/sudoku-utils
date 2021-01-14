@@ -1,13 +1,11 @@
-#include <time.h>
-#include <string>
-#include <fstream>
-#include <thread>
+#include <ctime>
 #include "log.hpp"
 
 int _log::setup(std::string filename)
 {
 	is_setting_up=1;
 	file=filename;
+	lock.unlock();
 	return 1;
 }
 
@@ -15,6 +13,7 @@ _log::_log(std::string filename)
 {
 	is_setting_up=1;
 	file=filename;
+	lock.unlock();
 	return;
 }
 
@@ -27,7 +26,7 @@ int _log::write(std::string msg)	//write msg to logfile with time ISO9601
 {
 	if(is_setting_up)
 	{
-		pthread_mutex_lock(&lock);
+		lock.lock();
 		myfile.open(_log::file, std::ios::out | std::ios::app | std::ios::ate); //write on the end of file
 		if(myfile.good())// if file is correct open
 		{
@@ -54,10 +53,10 @@ int _log::write(std::string msg)	//write msg to logfile with time ISO9601
 			myfile<<msg;
 			myfile<<"\n";
 			myfile.close();
-			pthread_mutex_unlock(&lock);
+			lock.unlock();
 			return 1;
 		}
-		pthread_mutex_unlock(&lock);
+		lock.unlock();
 	}
 	return 0;
 }
