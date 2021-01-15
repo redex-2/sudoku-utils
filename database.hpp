@@ -1,7 +1,9 @@
 #ifndef database_hpp
 #define database_hpp
 
+#ifdef POSTGRES
 #include <libpq-fe.h>
+#endif
 #include <string>
 #include "types.hpp"
 
