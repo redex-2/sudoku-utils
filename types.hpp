@@ -1,5 +1,5 @@
-#ifndef types
-#define types
+#ifndef types_hpp
+#define types_hpp
 
 typedef unsigned short uint16;
 typedef unsigned int uint32;
