@@ -6,8 +6,9 @@
 class _prime
 {
 	private:
-		bool miller_rabin(uint64);
-		bool standard(uint64);
+		uint64 sqrt(uint64 &);
+		bool miller_rabin(uint64 &);
+		bool standard(uint64 &);
 	public:
 		void method(uint16);
 		void precision(uint64);

@@ -4,6 +4,7 @@
 #include "md-5.hpp"
 #include "sha-2.hpp"
 #include "types.hpp"
+#include "prime.hpp"
 #ifdef DATABASE
 #include "database.hpp"
 #endif
@@ -11,6 +12,7 @@
 _des des;
 _sha256 sha256;
 _md5 md5;
+_prime prime;
 
 int main()
 {
@@ -40,6 +42,17 @@ int main()
 	std::string md = md5.create((char*)"The quick brown fox jumps over the lazy dog", 43); 
 	if(md0==md)std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"md5\t\t"<<std::hex<<md<<std::endl;
 	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"md5\t\t"<<std::hex<<md<<std::endl;
-
+	
+	std::cout<<std::endl;
+	
+	//prime
+	if(prime.check(11))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime standard\t"<<std::dec<<11<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime standard\t"<<std::dec<<11<<std::endl;
+	if(!prime.check(28))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime standard\t"<<std::dec<<28<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime standard\t"<<std::dec<<28<<std::endl;
+	if(prime.check(67))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime standard\t"<<std::dec<<67<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime standard\t"<<std::dec<<67<<std::endl;
+	if(!prime.check(100))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime standard\t"<<std::dec<<100<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime standard\t"<<std::dec<<100<<std::endl;
 	return 0;
 }
