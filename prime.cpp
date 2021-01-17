@@ -7,14 +7,15 @@ uint64 _prime::sqrt(uint64 number)
 	result = 1;
 	i = 1;
 	while (result <= number) 
-    { 
-		i++; 
-		result = i * i; 
-    } 
-    return i - 1; 
+    {
+		i++;
+		result = i * i;
+    }
+	if(result < number) i--;
+    return (uint64)i;
 }
 
-uint64 _prime::power(uint64 base, uint64 exponent, uint64 mod) 
+large_uint _prime::power(uint64 base, uint64 exponent, uint64 mod) 
 {
     result = 1;
     base = base % mod;
@@ -29,7 +30,7 @@ uint64 _prime::power(uint64 base, uint64 exponent, uint64 mod)
     return result;
 } 
 
-bool _prime::miller_rabin(uint32 number)
+bool _prime::miller_rabin(uint64 number)
 {
 	if(number == 2 
 		|| number == 3) return true;
@@ -72,6 +73,7 @@ bool _prime::standard(uint64 number)
 		|| number < 11) return false;
 	
 	uint64 c = sqrt(number);
+	if(c%2==1) c--;
 	while(number % c != 0)
 	{
 		if(c > 3)
@@ -109,7 +111,7 @@ uint16 _prime::check(uint64 number)
 		return miller_rabin(number)+1;
 }
 
-uint32 _prime::next(uint32 number)
+uint64 _prime::next(uint64 number)
 {
 	if(number%2==0) number++;
 	while(!check(number))

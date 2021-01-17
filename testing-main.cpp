@@ -80,7 +80,7 @@ int main()
 	else if((((t = prime.method(0))||1)&&prime.check(v)&&(prime.method(t)||1)))std::cout<<"[ "<<"\033[33m"<<"ACCEPT"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
 	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
 	
-	if((v=prime.next(0b10000000000000000000000000000000))==2147483649)std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	if((v=prime.next(0b1000000000000000000000000000000000000000000000000000000000))==2147483649)std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
 	else if((((t = prime.method(0))||1)&&prime.check(v)&&(prime.method(t)||1)))std::cout<<"[ "<<"\033[33m"<<"ACCEPT"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
 	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
 	
