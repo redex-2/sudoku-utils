@@ -1,5 +1,5 @@
-#ifndef large_uint_hpp
-#define large_uint_hpp
+#ifndef sha_hpp
+#define sha_hpp
 
 #include <sstream>
 #include "hash.hpp"
