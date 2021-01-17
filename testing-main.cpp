@@ -46,6 +46,7 @@ int main()
 	std::cout<<std::endl;
 	
 	//prime
+	prime.method(0);
 	if(prime.check(11))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime standard\t"<<std::dec<<11<<std::endl;
 	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime standard\t"<<std::dec<<11<<std::endl;
 	if(!prime.check(28))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime standard\t"<<std::dec<<28<<std::endl;
@@ -54,5 +55,29 @@ int main()
 	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime standard\t"<<std::dec<<67<<std::endl;
 	if(!prime.check(100))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime standard\t"<<std::dec<<100<<std::endl;
 	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime standard\t"<<std::dec<<100<<std::endl;
+	
+	prime.method(1);
+	if(prime.check(11))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime miller\t\t"<<std::dec<<11<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime miller\t\t"<<std::dec<<11<<std::endl;
+	if(!prime.check(28))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime miller\t\t"<<std::dec<<28<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime miller\t\t"<<std::dec<<28<<std::endl;
+	if(prime.check(67))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime miller\t\t"<<std::dec<<67<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime miller\t\t"<<std::dec<<67<<std::endl;
+	if(!prime.check(100))std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime miller\t\t"<<std::dec<<100<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime miller\t\t"<<std::dec<<100<<std::endl;
+	
+	prime.method(1);
+	
+	if((v=prime.next(11))==11)std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	if((v=prime.next(28))==29)std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	else if(v==31)std::cout<<"[ "<<"\033[33m"<<"ACCEPT"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	if((v=prime.next(67))==67)std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	if((v=prime.next(0b10000000000000000000000000000000))==2147483649)std::cout<<"[   "<<"\033[32m"<<"OK"<<"\033[0m"<<"   ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	else if(v==2147483659)std::cout<<"[ "<<"\033[33m"<<"ACCEPT"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
+	
 	return 0;
 }
