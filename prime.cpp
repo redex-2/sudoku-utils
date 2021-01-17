@@ -29,7 +29,7 @@ uint64 _prime::power(uint64 base, uint64 exponent, uint64 mod)
     return result;
 } 
 
-bool _prime::miller_rabin(uint32 &number)
+bool _prime::miller_rabin(uint32 number)
 {
 	if(number == 2 
 		|| number == 3) return true;
@@ -62,7 +62,7 @@ bool _prime::miller_rabin(uint32 &number)
 	return true;
 }
 
-bool _prime::standard(uint32 &number)
+bool _prime::standard(uint64 number)
 {
 	if(number == 2 
 		|| number == 3
@@ -82,20 +82,24 @@ bool _prime::standard(uint32 &number)
 	return false;
 }
 
-void _prime::method(uint16 n)
+uint16 _prime::method(uint16 n)
 {
+	t=m;
 	if(n>2)n=1;
 	m=n;
+	return t;
 }
 
-void _prime::precision(uint32 p)
+uint16 _prime::precision(uint32 p)
 {
+	t=k;
 	k=p;
+	return t;
 }
 
-uint16 _prime::check(uint32 number)
+uint16 _prime::check(uint64 number)
 {
-	if(m==0)
+	if(m==0 || number >= 0xFFFFFFFF)
 		return standard(number);
 	else if(m==1)
 		return miller_rabin(number);
