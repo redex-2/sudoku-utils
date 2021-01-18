@@ -76,7 +76,7 @@ bool _prime::standard(uint64 number)
 	uint64 n = 3;
 	while(number % n != 0)
 	{
-		if(n < c)
+		if(n <= c)
 			n+=2;
 		else
 			return true;
