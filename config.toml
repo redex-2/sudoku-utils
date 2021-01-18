@@ -1,0 +1,23 @@
+#not parse it
+main = "TOML STRING WITHOUT SECTION"
+
+[time]
+
+time = 2020-01-01T07:32:00+00:00 #random time
+
+[database]
+
+user = "root"#comment to delete
+pass = "secret"
+port = "7654321"
+
+[server]#connection
+
+ip = "198.51.100.60"	#ip adress
+key = "123"
+user = "redex2"
+pass = "qwerty123"
+
+[client]
+
+port = "8888"
