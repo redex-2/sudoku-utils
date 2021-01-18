@@ -12,7 +12,7 @@ class _prime
 		large_uint j=large_uint(256);
 		uint16 t, m = 2;//0=standard 1-miller_rabin 2-auto
 		uint32 k = 100;
-		uint64 d, a, i, x;
+		uint64 d, a, i, x, n, c;
 		uint64 sqrt(uint64);
 		large_uint power(uint64 base, uint64 exponent, uint64 mod);
 		bool miller_rabin(uint64);

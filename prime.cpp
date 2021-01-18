@@ -72,8 +72,8 @@ bool _prime::standard(uint64 number)
 	if(number%2 == 0 
 		|| number < 11) return false;
 	
-	const uint64 c = std::sqrt(number);
-	uint64 n = 3;
+	c = std::sqrt(number);
+	n = 3;
 	while(number % n != 0)
 	{
 		if(n <= c)
