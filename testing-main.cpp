@@ -4,6 +4,7 @@
 #include "md-5.hpp"
 #include "sha-2.hpp"
 #include "types.hpp"
+#include "toml.hpp"
 #ifdef DATABASE
 #include "database.hpp"
 #endif
@@ -11,6 +12,7 @@
 _des des;
 _sha256 sha256;
 _md5 md5;
+_toml toml("config.toml");
 
 int main()
 {
