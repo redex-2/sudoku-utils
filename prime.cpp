@@ -1,18 +1,18 @@
 #include "prime.hpp"
 #include <cstdlib>
-
+#include <cmath>
 uint64 _prime::sqrt(uint64 number)
 {
 	if(number == 0 || number == 1) return number;
 	result = 1;
-	i = 1;
+	j = 1;
 	while (result <= number) 
     {
-		i++;
-		result = i * i;
+		j++;
+		result = j * j;
     }
-	if(result < number) i--;
-    return (uint64)i;
+	if(result < number) j--;
+    return (uint64)j;
 }
 
 large_uint _prime::power(uint64 base, uint64 exponent, uint64 mod) 
@@ -44,7 +44,7 @@ bool _prime::miller_rabin(uint64 number)
 	for(uint64 i=0; i < k; i++)
 	{
 		a = 2 + std::rand() % (number - 4); 
-		x = power(a, d, number); 
+		x = (uint64)power(a, d, number); 
 	  
 		if (x == 1  || x == number-1) 
 		   continue;
@@ -72,12 +72,12 @@ bool _prime::standard(uint64 number)
 	if(number%2 == 0 
 		|| number < 11) return false;
 	
-	uint64 c = sqrt(number);
-	if(c%2==1) c--;
-	while(number % c != 0)
+	const uint64 c = std::sqrt(number);
+	uint64 n = 3;
+	while(number % n != 0)
 	{
-		if(c > 3)
-			c-=2;
+		if(n < c)
+			n+=2;
 		else
 			return true;
 	}
