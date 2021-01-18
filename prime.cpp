@@ -1,5 +1,5 @@
 #include "prime.hpp"
-#include <cstdlib>
+#include <random>
 #include <cmath>
 uint64 _prime::sqrt(uint64 number)
 {
@@ -30,6 +30,29 @@ large_uint _prime::power(uint64 base, uint64 exponent, uint64 mod)
     return result;
 } 
 
+bool _prime::miller_rabin_unit(uint64 d, uint64 number)
+{
+	std::random_device rd;
+	std::default_random_engine generator(rd());
+	std::uniform_int_distribution<uint64> distribution(2, number - 2);
+	a = distribution(generator);
+
+	x = (uint64)power(a, d, number);
+
+	if (x == 1 || x == number - 1)
+		return true;
+
+	while (d != number - 1)
+	{
+		x = (x * x) % number;
+		d *= 2;
+
+		if (x == 1)return false;
+		if (x == number - 1)return true;
+	}
+	return false;
+}
+
 bool _prime::miller_rabin(uint64 number)
 {
 	if(number == 2 
@@ -42,24 +65,8 @@ bool _prime::miller_rabin(uint64 number)
         d/=2; 
 		
 	for(uint64 i=0; i < k; i++)
-	{
-		a = 2 + std::rand() % (number - 4); 
-		x = (uint64)power(a, d, number); 
-	  
-		if (x == 1  || x == number-1) 
-		   continue;
-		   
-		while (d != number-1) 
-		{ 
-			x = (x*x)%number; 
-			d *= 2; 
-	  
-			if (x == 1)return false; 
-			if (x == number-1)continue; 
-		} 
-		return false;
-	}
-		
+		if (!miller_rabin_unit(d, number))
+			return false;
 	return true;
 }
 

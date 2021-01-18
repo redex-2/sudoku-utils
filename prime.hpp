@@ -16,6 +16,7 @@ class _prime
 		uint64 sqrt(uint64);
 		large_uint power(uint64 base, uint64 exponent, uint64 mod);
 		bool miller_rabin(uint64);
+		bool miller_rabin_unit(uint64, uint64);
 		bool standard(uint64);
 	public:
 		uint16 precision(uint32);
