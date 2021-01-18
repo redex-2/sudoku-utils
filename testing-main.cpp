@@ -6,6 +6,7 @@
 #include "types.hpp"
 #include "prime.hpp"
 #include "large-uint.hpp"
+#include "toml.hpp"
 #ifdef DATABASE
 #include "database.hpp"
 #endif
@@ -15,6 +16,7 @@ _sha256 sha256;
 _md5 md5;
 _prime prime;
 large_uint number(128);
+_toml toml("config.toml");
 
 int main()
 {
