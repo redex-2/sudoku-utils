@@ -1,6 +1,7 @@
 #include "prime.hpp"
 #include <random>
 #include <cmath>
+
 uint64 _prime::sqrt(uint64 number)
 {
 	if(number == 0 || number == 1) return number;
@@ -15,7 +16,7 @@ uint64 _prime::sqrt(uint64 number)
     return (uint64)j;
 }
 
-large_uint _prime::power(uint64 base, uint64 exponent, uint64 mod) 
+uint64 _prime::power(uint64 base, uint64 exponent, uint64 mod) 
 {
     result = 1;
     base = base % mod;
@@ -30,14 +31,14 @@ large_uint _prime::power(uint64 base, uint64 exponent, uint64 mod)
     return result;
 } 
 
-bool _prime::miller_rabin_unit(uint64 d, uint64 number)
+bool _prime::miller_rabin_unit(uint32 d, uint32 number)
 {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 	std::uniform_int_distribution<uint64> distribution(2, number - 2);
 	a = distribution(generator);
 
-	x = (uint64)power(a, d, number);
+	x = power(a, d, number);
 
 	if (x == 1 || x == number - 1)
 		return true;
@@ -53,7 +54,7 @@ bool _prime::miller_rabin_unit(uint64 d, uint64 number)
 	return false;
 }
 
-bool _prime::miller_rabin(uint64 number)
+bool _prime::miller_rabin(uint32 number)
 {
 	if(number == 2 
 		|| number == 3) return true;
@@ -64,7 +65,7 @@ bool _prime::miller_rabin(uint64 number)
     while (d%2 == 0) 
         d/=2; 
 		
-	for(uint64 i=0; i < k; i++)
+	for(i=0; i < k; i++)
 		if (!miller_rabin_unit(d, number))
 			return false;
 	return true;
