@@ -5,6 +5,7 @@
 #include "sha-2.hpp"
 #include "types.hpp"
 #include "prime.hpp"
+#include "large-uint.hpp"
 #ifdef DATABASE
 #include "database.hpp"
 #endif
@@ -13,6 +14,7 @@ _des des;
 _sha256 sha256;
 _md5 md5;
 _prime prime;
+large_uint number(128);
 
 int main()
 {
@@ -84,5 +86,9 @@ int main()
 	else if((((t = prime.method(0))||1)&&prime.check(v)&&(prime.method(t)||1)))std::cout<<"[ "<<"\033[33m"<<"ACCEPT"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
 	else std::cout<<"[ "<<"\033[31m"<<"FAILED"<<"\033[0m"<<" ] "<<"prime next\t\t"<<std::dec<<v<<std::endl;
 	
+	number.rand(40);
+	number.dump();
+	number.rand();
+	number.dump();
 	return 0;
 }

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "large-uint.hpp"
 
 large_uint::large_uint(uint16  bits)
