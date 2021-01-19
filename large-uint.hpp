@@ -13,7 +13,7 @@ class large_uint
 		uint16 get_length(const large_uint &);
 		
 		int comp(const large_uint &) const;
-		int comp(uint64) const;
+		int comp(uint32) const;
 		
 		void add (const large_uint &);
 		void add (const uint32 &);
@@ -122,17 +122,17 @@ class large_uint
 		void operator %= (uint32);
 
 		bool operator == (const large_uint &) const;
-		bool operator == (const uint64&) const;
+		bool operator == (const uint32&) const;
 		bool operator != (const large_uint &) const;
-		bool operator != (const uint64&n) const;
+		bool operator != (const uint32&n) const;
 		bool operator >  (const large_uint &) const;
-		bool operator >  (const uint64&) const;
+		bool operator >  (const uint32&) const;
 		bool operator >= (const large_uint &) const;
-		bool operator >= (const uint64&) const;
+		bool operator >= (const uint32&) const;
 		bool operator <  (const large_uint &) const;
-		bool operator <  (const uint64&) const;
+		bool operator <  (const uint32&) const;
 		bool operator <= (const large_uint &) const;
-		bool operator <= (const uint64&) const;
+		bool operator <= (const uint32&) const;
 
 };
 
@@ -159,12 +159,12 @@ bool operator || (const uint32&, const large_uint &);
 //uint32 operator |= (const uint32 &, const large_uint &);
 //uint32 operator ^= (const uint32 &, const large_uint &);
 
-bool operator == (const uint64&, const large_uint &);
-bool operator != (const uint64&, const large_uint &);
-bool operator >  (const uint64&, const large_uint &);
-bool operator >= (const uint64&, const large_uint &);
-bool operator <  (const uint64&, const large_uint &);
-bool operator <= (const uint64&, const large_uint &);
+bool operator == (const uint32&, const large_uint &);
+bool operator != (const uint32&, const large_uint &);
+bool operator >  (const uint32&, const large_uint &);
+bool operator >= (const uint32&, const large_uint &);
+bool operator <  (const uint32&, const large_uint &);
+bool operator <= (const uint32&, const large_uint &);
 
 
 #endif

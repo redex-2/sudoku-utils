@@ -362,7 +362,7 @@ bool large_uint::operator == (const large_uint &n) const
 	return comp(n) == 0;
 }
 
-bool large_uint::operator == (const uint64  &n) const 
+bool large_uint::operator == (const uint32  &n) const 
 {
 	return comp(n) == 0;
 }
@@ -372,7 +372,7 @@ bool large_uint::operator != (const large_uint &n) const
 	return comp(n) != 0;
 }
 
-bool large_uint::operator != (const uint64  &n) const 
+bool large_uint::operator != (const uint32  &n) const 
 {
 	return comp(n) != 0;
 }
@@ -382,7 +382,7 @@ bool large_uint::operator >  (const large_uint &n) const
 	return comp(n) >  0;
 }
 
-bool large_uint::operator >  (const uint64  &n) const 
+bool large_uint::operator >  (const uint32  &n) const 
 {
 	return comp(n) >  0;
 }
@@ -392,7 +392,7 @@ bool large_uint::operator >= (const large_uint &n) const
 	return comp(n) >= 0;
 }
 
-bool large_uint::operator >= (const uint64  &n) const 
+bool large_uint::operator >= (const uint32  &n) const 
 {
 	return comp(n) >= 0;
 }
@@ -402,7 +402,7 @@ bool large_uint::operator <  (const large_uint &n) const
 	return comp(n) <  0;
 }
 
-bool large_uint::operator <  (const uint64  &n) const 
+bool large_uint::operator <  (const uint32  &n) const 
 {
 	return comp(n) <  0;
 }
@@ -412,7 +412,7 @@ bool large_uint::operator <= (const large_uint &n) const
 	return comp(n) <= 0;
 }
 
-bool large_uint::operator <= (const uint64  &n) const 
+bool large_uint::operator <= (const uint32  &n) const 
 {
 	return comp(n) <= 0;
 }

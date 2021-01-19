@@ -112,16 +112,16 @@ int large_uint::comp(const large_uint &n) const
 	}
 }
 
-int large_uint::comp(uint64 n) const
+int large_uint::comp(uint32 n) const
 {
-	for (uint16 i = length-1; i >= 2; i--)
+	for (uint16 i = length-1; i >= 1; i--)
 	{
 		if (value[i] != 0)
 		{
 			return 1;
 		}
 	}
-	return (value[0]|(uint64)value[1]<<32) > n ? 1 : (value[0]|(uint64)value[1]<<32) < n ? -1 : 0;
+	return value[0] > n ? 1 : value[0] < n ? -1 : 0;
 }
 
 

@@ -50,27 +50,27 @@ bool operator || (const uint32 &n, const large_uint &l)
 //uint32 operator ^= (const uint32&, const large_uint &){}
 
 
-bool operator == (const uint64  &n, const large_uint &l) 
+bool operator == (const uint32  &n, const large_uint &l) 
 {
 	return l == n;
 }
 
-bool operator != (const uint64  &n, const large_uint &l) 
+bool operator != (const uint32  &n, const large_uint &l) 
 {
 	return l != n;
 }
 
-bool operator > (const uint64  &n, const large_uint &l) 
+bool operator > (const uint32  &n, const large_uint &l) 
 {
 	return l < n;
 }
 
-bool operator >= (const uint64  &n, const large_uint &l) 
+bool operator >= (const uint32  &n, const large_uint &l) 
 {
 	return l <= n;
 }
 
-bool operator < (const uint64  &n, const large_uint &l) 
+bool operator < (const uint32  &n, const large_uint &l) 
 {
 	return l > n;
 }
