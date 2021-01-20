@@ -1,6 +1,6 @@
 #include "large-uint.hpp"
 
-large_uint::large_uint(uint16  bits)
+large_uint::large_uint(uint32  bits)
 { 
 	if(bits == 0) throw;
 	length = (bits + 31) / 32; 
@@ -20,13 +20,13 @@ large_uint::~large_uint()
 	delete [] value;
 }
 
-void large_uint::change_length(uint16 n)
+void large_uint::change_length(uint32 n)
 {
-	if(n==length)
+	if(((n + 31) / 32)==length)
 	{
 		return;
 	}
-	else if(n>length)
+	else if(((n + 31) / 32) >length)
 	{
 		uint32 *copy_of_value = new uint32[length];
 		for (uint16 i = 0; i < length; i++)
@@ -34,19 +34,19 @@ void large_uint::change_length(uint16 n)
 			copy_of_value[i] = value[i];
 		}
 		delete [] value;
-		value = new uint32 [n]; 
+		value = new uint32 [((n + 31) / 32)];
 		
 		for (uint16 i = 0; i < length; i++)
 		{
 			value[i]=copy_of_value[i];
 		}
 		
-		for (uint16 i = length; i < n; i++)
+		for (uint16 i = length; i < ((n + 31) / 32); i++)
 		{
 			value[i] = 0;
 		}
 		delete [] copy_of_value;
-		length=n;
+		length = ((n + 31) / 32);
 	}
 	else
 	{
@@ -56,13 +56,13 @@ void large_uint::change_length(uint16 n)
 			copy_of_value[i] = value[i];
 		}
 		delete [] value;
-		value = new uint32 [n]; 
+		value = new uint32 [((n + 31) / 32)];
 		for (uint16 i = 0; i < length; i++)
 		{
 			value[i]=copy_of_value[i];
 		}
 		delete [] copy_of_value;
-		length=n;
+		length = ((n + 31) / 32);
 	}
 }
 
@@ -314,7 +314,7 @@ void large_uint::multi (const uint32 &n)
 
 large_uint large_uint::pow(large_uint &exponent, large_uint &modulus)
 {
-	large_uint r((32 * this->get_length()) * (32*exponent.get_length()) );
+	large_uint r(0xffff);//((32 * this->get_length()) * (32*exponent.get_length()) );
 	r = 1;
 	bool one = true;
 	uint16 i = exponent.length;

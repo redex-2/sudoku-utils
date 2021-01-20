@@ -44,13 +44,16 @@ class large_uint
 		
 		void bit_xor (const large_uint &);
 		void bit_xor (const uint32 &);
+
+
+		bool prime_check_uint(void);
 		
 	public:
-		large_uint(uint16);
+		large_uint(uint32);	//max size = (2^16)*32
 		large_uint(const large_uint &);
 		~large_uint();
 		
-		void change_length(uint16);
+		void change_length(uint32);
 		
 		void dump(void) const;
 		
@@ -59,7 +62,10 @@ class large_uint
 		large_uint sqrt(void);
 
 		large_uint rand(void);
-		large_uint rand(uint16);
+		large_uint rand(uint32);
+
+		bool prime_check(void);
+		large_uint prime_next(void);
 
 		void operator = (const large_uint &);
 		void operator = (uint32);
