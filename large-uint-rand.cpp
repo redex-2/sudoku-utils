@@ -12,7 +12,7 @@ large_uint large_uint::rand(void)
 	return *this;
 }
 
-large_uint large_uint::rand(uint16 n)
+large_uint large_uint::rand(uint32 n)
 {
 	std::random_device rd;
 	std::default_random_engine generator(rd());

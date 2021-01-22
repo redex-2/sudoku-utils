@@ -3,6 +3,7 @@
 large_uint::large_uint(uint32  bits)
 { 
 	if(bits == 0) throw;
+	if (bits > 2097120) bits = 2097120;
 	length = (bits + 31) / 32; 
 	value = new uint32 [length]; 
 	for (uint16 i = 0; i < length; i++) value[i]=0;
@@ -22,6 +23,7 @@ large_uint::~large_uint()
 
 void large_uint::change_length(uint32 n)
 {
+	if (n > 2097120) n = 2097120;
 	if(((n + 31) / 32)==length)
 	{
 		return;
@@ -314,7 +316,7 @@ void large_uint::multi (const uint32 &n)
 
 large_uint large_uint::pow(large_uint &exponent, large_uint &modulus)
 {
-	large_uint r(0xffff);//((32 * this->get_length()) * (32*exponent.get_length()) );
+	large_uint r(0xfffff);//((32 * this->get_length()) * (32*exponent.get_length()) );
 	r = 1;
 	bool one = true;
 	uint16 i = exponent.length;

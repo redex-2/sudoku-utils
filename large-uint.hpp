@@ -46,7 +46,7 @@ class large_uint
 		void bit_xor (const uint32 &);
 
 
-		bool prime_check_uint(void);
+		bool prime_check_uint(large_uint, large_uint);
 		
 	public:
 		large_uint(uint32);	//max size = (2^16)*32

@@ -90,5 +90,11 @@ int main()
 	number.dump();
 	number.rand();
 	number.dump();
+
+
+	//number = 23;
+	//number.dump();
+	std::cout << number.prime_check() << std::endl;
+	number.dump();
 	return 0;
 }
