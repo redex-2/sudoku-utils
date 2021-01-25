@@ -1,5 +1,6 @@
 #not parse it
 main = "TOML STRING WITHOUT SECTION"
+test = "second line of without section"
 
 [time]
 
@@ -7,17 +8,19 @@ time = 2020-01-01T07:32:00+00:00 #random time
 
 [database]
 
-user = "root"#comment to delete
+us .	er = "root"#comment to delete
 pass = "secret"
-port = "7654321"
+int = -214748364
+port = 2147483649 #comment
+en = false
 
 [server]#connection
 
 ip = "198.51.100.60"	#ip adress
-key = "123"
+key = 123
 user = "redex2"
 pass = "qwerty123"
 
 [client]
 
-port = "8888"
+port = 8888
