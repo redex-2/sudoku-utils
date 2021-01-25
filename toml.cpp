@@ -43,7 +43,7 @@ bool _toml::section(std::string section)
 		{
 			temp.erase(std::remove(temp.begin(), temp.end(), ' '), temp.end());
 			temp.erase(std::remove(temp.begin(), temp.end(), '\t'), temp.end());
-			if (temp == "["+section+"]")
+			if (temp == "["+section+"]" || temp == "["+section+"]"+'\r')
 				break;
 		}
 		while (std::getline(tomlfile, temp))
