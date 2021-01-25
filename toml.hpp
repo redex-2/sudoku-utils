@@ -5,8 +5,6 @@
 #include <sstream>
 #include <algorithm>
 #include <fstream>
-#include <string>
-#include <iostream>
 //#include <codecvt>
 
 class _toml
