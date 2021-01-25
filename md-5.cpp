@@ -51,7 +51,7 @@ std::string _md5::create(char *message, uint64 len)
 {
 	init();
 	sstring.str(std::string());
-	_hash::split_message(message, len, data, out_len, block_size);
+	_reverse_hash::split_message(message, len, data, out_len, block_size);
 	
 	for(j = 0; j < out_len; j++)
 	{
@@ -62,22 +62,9 @@ std::string _md5::create(char *message, uint64 len)
 		
 		for(i = 0; i < 16; i++)
 		{
-			if(i<14)
-			{
-				word[i] = permutation(*(*(data+i)+j));
-			}
-			else 
-			{
-				if(i==14)
-				{
-					word[i]=*(*(data+i+1)+j);
-				}
-				else
-				{
-					word[i]=*(*(data+i-1)+j);
-				}
-			}
+			word[i] = (*(*(data+i)+j));
 		}
+		
 		for(i = 0; i < 16; i++)
 		{
 			working[4] = F(working[1], working[2], working[3]);

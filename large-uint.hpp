@@ -2,6 +2,8 @@
 #define large_uint_hpp
 
 #include "types.hpp"
+#include <iostream>
+#include <random>
 
 class large_uint
 {
@@ -55,7 +57,10 @@ class large_uint
 		large_uint pow(large_uint &, large_uint &);
 		large_uint pow(large_uint &);
 		large_uint sqrt(void);
-		
+
+		large_uint rand(void);
+		large_uint rand(uint16);
+
 		void operator = (const large_uint &);
 		void operator = (uint32);
 

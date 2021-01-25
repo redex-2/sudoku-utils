@@ -221,7 +221,7 @@ large_uint::operator uint32 ()
 
 large_uint::operator uint64 ()
 {
-	return ((uint64) value[0]<<32|value[1]);
+	return (value[0]|(uint64)value[1]<<32);
 }
 
 

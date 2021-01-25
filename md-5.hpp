@@ -5,7 +5,7 @@
 #include "hash.hpp"
 #include <sstream>
 
-class _md5:protected _hash
+class _md5:protected _reverse_hash
 {
 	private:
 		uint16 i;

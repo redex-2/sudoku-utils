@@ -75,7 +75,7 @@ bool operator < (const uint32  &n, const large_uint &l)
 	return l > n;
 }
 
-bool operator <= (const uint32  &n, const large_uint &l) 
+bool operator <= (const uint64  &n, const large_uint &l) 
 {
 	return l >= n;
 }
