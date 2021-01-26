@@ -99,7 +99,9 @@ bool _toml::key(std::string key)
 	{
 		std::stringstream sstream(s);
 		std::string temp;
-		bool multiline = 0;
+		bool multiline_basic_string = 0;
+		bool multiline_literal_string = 0;
+		uint64 multiline_array = 0;
 		while (std::getline(sstream, temp))
 		{
 			uint32 pos = temp.find_first_of("=");
@@ -125,7 +127,7 @@ bool _toml::key(std::string key)
 					{
 						//find end of array
 						//TODO
-						multiline = 1;
+						multiline_array = 1;
 					}
 					//bool test
 					else if (key_data.length() >= 4 && key_data[0] == 't' && key_data[1] == 'r' && key_data[2] == 'u' && key_data[3] == 'e')
@@ -452,7 +454,7 @@ bool _toml::key(std::string key)
 						key_data.erase(0, 1);
 						if (key_data[0] == '"' && key_data[1] == '"')
 						{
-							multiline = 1;
+							multiline_basic_string = 1;
 							//change multiline to single line
 							//TODO
 							//TODO:multiline in '''
@@ -489,6 +491,40 @@ bool _toml::key(std::string key)
 									else if (key_data[i] == '\\') k += '\\';
 									else if (key_data[i] == 'u') k += "\\u";
 									else if (key_data[i] == 'U') k += "\\U";
+									else k += key_data[i];
+								}
+								else
+								{
+									k += key_data[i];
+								}
+								i++;
+							}
+						}
+					}
+					else if (key_data[0] == '\'')
+					{
+						key_data.erase(0, 1);
+						if (key_data[0] == '\'' && key_data[1] == '\'')
+						{
+							multiline_literal_string = 1;
+							//change multiline to single line
+							//TODO
+							//TODO:multiline in '''
+						}
+						else
+						{
+							uint32 i = 0;
+							while(1)
+							{
+								if (i > key_data.length())
+								{
+									return false;
+								}
+								else if (key_data[i] == '\'')
+								{
+									temp = key_data;
+									temp.erase(0, i+1);
+									return eos(temp);
 								}
 								else
 								{
