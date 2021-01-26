@@ -24,3 +24,12 @@ pass = "qwerty123"
 [client]
 
 port = 8888
+
+[numbers]
+
+bin = -0b1010
+oct = -0o307216
+hex = -0x3FC
+ubin = 0b1010
+uoct = 0o307216
+uhex = 0x3FC

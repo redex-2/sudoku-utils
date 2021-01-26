@@ -39,13 +39,18 @@ bool _toml::section(std::string section)
 		std::stringstream sstream;
 		std::string temp = "";
 		s = "";
+		bool c = 0;
 		while (std::getline(tomlfile, temp))
 		{
 			temp.erase(std::remove(temp.begin(), temp.end(), ' '), temp.end());
 			temp.erase(std::remove(temp.begin(), temp.end(), '\t'), temp.end());
-			if (temp == "["+section+"]" || temp == "["+section+"]"+'\r')
+			if (temp == "[" + section + "]" || temp == "[" + section + "]" + '\r')
+			{
 				break;
+				c = 1;
+			}
 		}
+		if (c) return false;
 		while (std::getline(tomlfile, temp))
 		{
 			uint32 pos = temp.find_first_not_of(" \t\r\n");
@@ -61,6 +66,8 @@ bool _toml::section(std::string section)
 			}
 		}
 		tomlfile.close();
+		s = sstream.str();
+		return true;
 	}
 	return false;
 }
@@ -88,6 +95,8 @@ bool _toml::section(void)
 			}
 		}
 		tomlfile.close();
+		s = sstream.str();
+		return true;
 	}
 	return false;
 }
@@ -95,6 +104,7 @@ bool _toml::section(void)
 bool _toml::key(std::string key)
 {
 	if (!is_setting_up) return false;
+	k.clear();
 	if (s != "")
 	{
 		std::stringstream sstream(s);
@@ -113,7 +123,6 @@ bool _toml::key(std::string key)
 				key_str.erase(std::remove(key_str.begin(), key_str.end(), '\t'), key_str.end());
 				if (key == key_str)
 				{
-					k.clear();
 					//TODO:key in ' or "
 					std::string key_data = temp;
 					key_data.erase(0, pos + 1);
@@ -292,6 +301,7 @@ bool _toml::key(std::string key)
 						else if (key_data.length() >= 3 && key_data[0] == '0' && key_data[1] == 'b')
 						{
 							uint32 i = 2;
+							k += "0b";
 							while (key_data.length() >= i && (key_data[i] >= '0' && key_data[i] <= '1' || key_data[i] == '_'))
 							{
 								k += key_data[i];
@@ -305,6 +315,7 @@ bool _toml::key(std::string key)
 						else if (key_data.length() >= 3 && key_data[0] == '0' && key_data[1] == 'o')
 						{
 							uint32 i = 2;
+							k += "0o";
 							while (key_data.length() >= i && (key_data[i] >= '0' && key_data[i] <= '7' || key_data[i] == '_'))
 							{
 								k += key_data[i];
@@ -318,6 +329,7 @@ bool _toml::key(std::string key)
 						else if (key_data.length() >= 3 && key_data[0] == '0' && key_data[1] == 'x')
 						{
 							uint32 i = 2;
+							k += "0x";
 							while (key_data.length() >= i && (key_data[i] >= '0' && key_data[i] <= '9' || key_data[i] >= 'a' && key_data[i] <= 'f' || key_data[i] >= 'A' && key_data[i] <= 'F' || key_data[i] == '_'))
 							{
 								k += key_data[i];
@@ -331,6 +343,7 @@ bool _toml::key(std::string key)
 						else if (key_data.length() >= 4 && key_data[0] == '-' && key_data[1] == '0' && key_data[2] == 'b')
 						{
 							uint32 i = 3;
+							k += "-0b";
 							while (key_data.length() >= i && (key_data[i] >= '0' && key_data[i] <= '1' || key_data[i] == '_'))
 							{
 								k += key_data[i];
@@ -344,6 +357,7 @@ bool _toml::key(std::string key)
 						else if (key_data.length() >= 4 && key_data[0] == '-' && key_data[1] == '0' && key_data[2] == 'o')
 						{
 							uint32 i = 3;
+							k += "-0o";
 							while (key_data[i] >= '0' && key_data[i] <= '7' || key_data[i] == '_')
 							{
 								k += key_data[i];
@@ -357,6 +371,7 @@ bool _toml::key(std::string key)
 						else if (key_data.length() >= 4 && key_data[0] == '-' && key_data[1] == '0' && key_data[2] == 'x')
 						{
 							uint32 i = 3;
+							k += "-0x";
 							while (key_data[i] >= '0' && key_data[i] <= '9' || key_data[i] >= 'a' && key_data[i] <= 'f' || key_data[i] >= 'A' && key_data[i] <= 'F' || key_data[i] == '_')
 							{
 								k += key_data[i];
@@ -556,24 +571,68 @@ std::string _toml::get(void)
 int64 _toml::get_int(void)
 {
 	if (!is_setting_up) return 0;
-	uint64 temp;
+	int64 result = 0;
+	std::string temp = k;
 	try
 	{
-		temp = stoll(k);
+		if (((temp[0] == '0' && (temp[1] == 'b' || temp[1] == 'o' || temp[1] == 'x')) || (temp[0] == '-' && temp[1] == '0' && (temp[2] == 'b' || temp[2] == 'o' || temp[2] == 'x' ))) && temp.length() >= 3)
+		{
+			if (temp[1] == 'b' || temp[2] == 'b')
+			{
+				temp.erase(temp.find_first_of('0'), 2);
+				result = stoll(temp, 0, 2);
+			}
+			else if (temp[1] == 'o' || temp[2] == 'o')
+			{
+				temp.erase(temp.find_first_of('0'), 2);
+				result = stoll(temp, 0, 8);
+			}
+			else if (temp[1] == 'x' || temp[2] == 'x')
+			{
+				temp.erase(temp.find_first_of('0'), 2);
+				result = stoll(temp, 0, 16);
+			}
+		}
+		else
+		{
+			result = stoll(temp);
+		}
 	}
 	catch (...)
 	{
-		temp = 0;
+		result = 0;
 	}
-	return temp;
+	return result;
 }
 
 bool _toml::get_int(int64& result)
 {
 	if (!is_setting_up) return 0;
+	std::string temp = k;
 	try
 	{
-		result = stoll(k);
+		if (((temp[0] == '0' && (temp[1] == 'b' || temp[1] == 'o' || temp[1] == 'x')) || (temp[0] == '-' && temp[1] == '0' && (temp[2] == 'b' || temp[2] == 'o' || temp[2] == 'x'))) && temp.length() >= 3)
+		{
+			if (temp[1] == 'b' || temp[2] == 'b')
+			{
+				temp.erase(temp.find_first_of('0'), 2);
+				result = stoll(temp, 0, 2);
+			}
+			else if (temp[1] == 'o' || temp[2] == 'o')
+			{
+				temp.erase(temp.find_first_of('0'), 2);
+				result = stoll(temp, 0, 8);
+			}
+			else if (temp[1] == 'x' || temp[2] == 'x')
+			{
+				temp.erase(temp.find_first_of('0'), 2);
+				result = stoll(temp, 0, 16);
+			}
+		}
+		else
+		{
+			result = stoll(temp);
+		}
 	}
 	catch (...)
 	{
@@ -588,24 +647,68 @@ bool _toml::get_int(int64& result)
 uint64 _toml::get_uint(void)
 {
 	if (!is_setting_up) return 0;
-	uint64 temp;
+	uint64 result = 0;
+	std::string temp = k;
 	try
 	{
-		temp = stoll(k);
+		if ((temp[0] == '0' && (temp[1] == 'b' || temp[1] == 'o' || temp[1] == 'x')) && temp.length() >= 3)
+		{
+			if (temp[1] == 'b' || temp[2] == 'b')
+			{
+				temp.erase(0, 2);
+				result = stoll(temp, 0, 2);
+			}
+			else if (temp[1] == 'o' || temp[2] == 'o')
+			{
+				temp.erase(0, 2);
+				result = stoll(temp, 0, 8);
+			}
+			else if (temp[1] == 'x' || temp[2] == 'x')
+			{
+				temp.erase(1, 2);
+				result = stoll(temp, 0, 16);
+			}
+		}
+		else
+		{
+			result = stoll(temp);
+		}
 	}
 	catch (...)
 	{
-		temp = 0;
+		result = 0;
 	}
-	return temp;
+	return result;
 }
 
 bool _toml::get_uint(uint64 &result)
 {
 	if (!is_setting_up) return 0;
+	std::string temp = k;
 	try
 	{
-		result = stoll(k);
+		if ((temp[0] == '0' && (temp[1] == 'b' || temp[1] == 'o' || temp[1] == 'x')) && temp.length() >= 3)
+		{
+			if (temp[1] == 'b' || temp[2] == 'b')
+			{
+				temp.erase(temp.find_first_of('0'), 2);
+				result = stoll(temp, 0, 2);
+			}
+			else if (temp[1] == 'o' || temp[2] == 'o')
+			{
+				temp.erase(temp.find_first_of('0'), 2);
+				result = stoll(temp, 0, 8);
+			}
+			else if (temp[1] == 'x' || temp[2] == 'x')
+			{
+				temp.erase(temp.find_first_of('0'), 2);
+				result = stoll(temp, 0, 16);
+			}
+		}
+		else
+		{
+			result = stoll(temp);
+		}
 	}
 	catch (...)
 	{

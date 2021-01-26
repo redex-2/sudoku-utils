@@ -124,7 +124,34 @@ int main()
 	toml.key("us.er");
 	if (toml.get() == "root")std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section string" << std::endl;
 	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section string" << std::endl; ok = 0; }
+	
 
+	toml.section("numbers");
+	toml.key("ubin");
+
+	if (toml.get_uint(temp_uint64) && temp_uint64 == 10)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section ubin" << std::endl;
+	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section ubin" << std::endl; ok = 0; }
+
+	toml.key("uoct");
+	if (toml.get_uint(temp_uint64) && temp_uint64 == 102030)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section uoct" << std::endl;
+	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section uoct" << std::endl; ok = 0; }
+
+	toml.key("uhex");
+	if (toml.get_uint(temp_uint64) && temp_uint64 == 1020)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section uhex" << std::endl;
+	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section uhex" << std::endl; ok = 0; }
+
+
+	toml.key("bin");
+	if (toml.get_int(temp_int64) && temp_int64 == -10)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section bin" << std::endl;
+	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section bin" << std::endl; ok = 0; }
+
+	toml.key("oct");
+	if (toml.get_int(temp_int64) && temp_int64 == -102030)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section oct" << std::endl;
+	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section oct" << std::endl; ok = 0; }
+
+	toml.key("hex");
+	if (toml.get_int(temp_int64) && temp_int64 == -1020)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section hex" << std::endl;
+	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section hex" << std::endl; ok = 0; }
 
 
 	if (ok)std::cout << std::endl << std::endl << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "completed\t\t" << std::endl;
