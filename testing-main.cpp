@@ -127,31 +127,42 @@ int main()
 	
 
 	toml.section("numbers");
-	toml.key("ubin");
 
-	if (toml.get_uint(temp_uint64) && temp_uint64 == 10)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section ubin" << std::endl;
+	toml.key("ubin");
+	if (toml.get_uint(temp_uint64) && toml.get_uint() == 10)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section ubin" << std::endl;
 	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section ubin" << std::endl; ok = 0; }
 
 	toml.key("uoct");
-	if (toml.get_uint(temp_uint64) && temp_uint64 == 102030)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section uoct" << std::endl;
+	if (toml.get_uint(temp_uint64) && toml.get_uint() == 102030)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section uoct" << std::endl;
 	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section uoct" << std::endl; ok = 0; }
 
 	toml.key("uhex");
-	if (toml.get_uint(temp_uint64) && temp_uint64 == 1020)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section uhex" << std::endl;
+	if (toml.get_uint(temp_uint64) && toml.get_uint() == 1020)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section uhex" << std::endl;
 	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section uhex" << std::endl; ok = 0; }
 
 
 	toml.key("bin");
-	if (toml.get_int(temp_int64) && temp_int64 == -10)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section bin" << std::endl;
+	if (toml.get_int(temp_int64) && toml.get_int() == -10)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section bin" << std::endl;
 	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section bin" << std::endl; ok = 0; }
 
 	toml.key("oct");
-	if (toml.get_int(temp_int64) && temp_int64 == -102030)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section oct" << std::endl;
+	if (toml.get_int(temp_int64) && toml.get_int() == -102030)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section oct" << std::endl;
 	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section oct" << std::endl; ok = 0; }
 
 	toml.key("hex");
-	if (toml.get_int(temp_int64) && temp_int64 == -1020)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section hex" << std::endl;
+	if (toml.get_int(temp_int64) && toml.get_int() == -1020)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section hex" << std::endl;
 	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section hex" << std::endl; ok = 0; }
+
+	toml.section("server");
+	bool temp_bool;
+
+	toml.key("ipv6");
+	if (toml.get_bit(temp_bool) && toml.get_bit() == 1)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section bool" << std::endl;
+	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section bool" << std::endl; ok = 0; }
+
+	toml.key("ipv4");
+	if (toml.get_bit(temp_bool) && toml.get_bit() == 0)std::cout << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "toml section bool" << std::endl;
+	else { std::cout << "[ " << "\033[31m" << "FAILED" << "\033[0m" << " ] " << "toml section bool" << std::endl; ok = 0; }
 
 
 	if (ok)std::cout << std::endl << std::endl << "[   " << "\033[32m" << "OK" << "\033[0m" << "   ] " << "completed\t\t" << std::endl;
