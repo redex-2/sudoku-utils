@@ -19,12 +19,14 @@ int _toml::setup(std::string filename)
 	return 1;
 }
 
-bool _toml::eos(std::string data)
+bool _toml::eos(std::string data, uint32 i)
 {
+	data.erase(0, i);
 	uint32 pos = data.find_first_not_of(" \t\r\n");
 	if (pos != -1 && data[pos] != '#')
 	{
 		k.clear();
+		type = TOML_UNDEFINED;
 		return false;
 	}
 	return true;
@@ -105,6 +107,7 @@ bool _toml::key(std::string key)
 {
 	if (!is_setting_up) return false;
 	k.clear();
+	type = TOML_UNDEFINED;
 	if (s != "")
 	{
 		std::stringstream sstream(s);
@@ -141,36 +144,28 @@ bool _toml::key(std::string key)
 					//bool test
 					else if (key_data.length() >= 4 && key_data[0] == 't' && key_data[1] == 'r' && key_data[2] == 'u' && key_data[3] == 'e')
 					{
-						temp = key_data;
-						temp.erase(0, 4);
-						k.clear();
+						type = TOML_SPECIAL_BOOL | TOML_SPECIAL;
 						k += "true";
-						return eos(temp);
+						return eos(key_data, 4);
 					}
 					else if (key_data.length() >= 5 && key_data[0] == 'f' && key_data[1] == 'a' && key_data[2] == 'l' && key_data[3] == 's' && key_data[4] == 'e')
 					{
-						temp = key_data;
-						temp.erase(0, 5);
-						k.clear();
+						type = TOML_SPECIAL_BOOL | TOML_SPECIAL;
 						k += "false";
-						return eos(temp);
+						return eos(key_data, 5);
 					}
 					else if (key_data.length() >= 3 && key_data[0] == 'i' && key_data[1] == 'n' && key_data[2] == 'f')
 					{
-						temp = key_data;
-						temp.erase(0, 3);
-						k.clear();
+						type = TOML_SPECIAL_INFINITY;
 						k += "inf";
-						return eos(temp);
+						return eos(key_data, 3);
 					}
 					//nan
 					else if (key_data.length() >= 3 && key_data[0] == 'n' && key_data[1] == 'a' && key_data[2] == 'n')
 					{
-						temp = key_data;
-						temp.erase(0, 3);
-						k.clear();
+						type = TOML_SPECIAL_NOT_A_NUMBER;
 						k += "nan";
-						return eos(temp);
+						return eos(key_data, 3);
 					}
 					//first char is number
 					else if (key_data[0] >= '0' && key_data[0] <= '9' || key_data[0] == '+' || key_data[0] == '-')
@@ -180,23 +175,18 @@ bool _toml::key(std::string key)
 						{
 							if (key_data[0] == '-')
 							{
-								temp = key_data;
-								temp.erase(0, 4);
-								k.clear();
+								type = TOML_SPECIAL_INFINITY | TOML_SPECIAL_NEGATIVE;
 								k += "-inf";
-								return eos(temp);
+								return eos(key_data, 4);
 							}
 							else if (key_data[0] == '+')
 							{
-								temp = key_data;
-								temp.erase(0, 4);
-								k.clear();
+								type = TOML_SPECIAL_INFINITY | TOML_SPECIAL_POSITIVE;
 								k += "+inf";
-								return eos(temp);
+								return eos(key_data, 4);
 							}
 							else
 							{
-								k.clear();
 								return false;
 							}
 						}
@@ -205,23 +195,18 @@ bool _toml::key(std::string key)
 						{
 							if (key_data[0] == '-')
 							{
-								temp = key_data;
-								temp.erase(0, 4);
-								k.clear();
+								type = TOML_SPECIAL_NOT_A_NUMBER | TOML_SPECIAL_NEGATIVE;
 								k += "-nan";
-								return eos(temp);
+								return eos(key_data, 4);
 							}
 							else if (key_data[0] == '+')
 							{
-								temp = key_data;
-								temp.erase(0, 4);
-								k.clear();
+								type = TOML_SPECIAL_NOT_A_NUMBER | TOML_SPECIAL_POSITIVE;
 								k += "+nan";
-								return eos(temp);
+								return eos(key_data, 4);
 							}
 							else
 							{
-								k.clear();
 								return false;
 							}
 						}
@@ -229,6 +214,7 @@ bool _toml::key(std::string key)
 						else if (key_data[4] == '-' && key_data[7] == '-')
 						{
 							uint32 i = 0;
+							type = TOML_TIME_DATE;
 							while (key_data.length() >= i &&  key_data[i] >= '0' && key_data[i] <= '9')
 							{
 								k += key_data[i];
@@ -240,6 +226,8 @@ bool _toml::key(std::string key)
 								}
 								if (i == 10 && (key_data[i] == 'T' || key_data[i] == ' ') && key_data[i + 1] >= '0' && key_data[i + 1] <= '9')
 								{
+									type = TOML_TIME_DATETIME;
+									if (key_data[i] == 'T') type |= TOML_TIME_USE_T_SEPARATOR;
 									k += key_data[i];
 									i++;
 								}
@@ -250,11 +238,13 @@ bool _toml::key(std::string key)
 								}
 								if (i == 19 && key_data[i] == '.' && key_data[i + 1] >= '0' && key_data[i + 1] <= '9')
 								{
+									type |= TOML_TIME_FLOATING_SECOND;
 									k += key_data[i];
 									i++;
 								}
 								if (i >= 19 && (key_data[i] == '-' || key_data[i] == '+') && key_data[i + 1] >= '0' && key_data[i + 1] <= '9')
 								{
+									type |= TOML_TIME_OFFSET;
 									k += key_data[i];
 									i++;
 								}
@@ -267,16 +257,16 @@ bool _toml::key(std::string key)
 							}
 							if (key_data[i] == 'Z')
 							{
+								type |= TOML_TIME_OFFSET;
 								k += key_data[i];
 								i++;
 							}
-							temp = key_data;
-							temp.erase(0, i);
-							return eos(temp);
+							return eos(key_data, i);
 						}
 						//time test
 						else if (key_data[2] == ':' && key_data[5] == ':')
 						{
+							type = TOML_TIME_TIME;
 							uint32 i = 0;
 							while (key_data.length() >= i && key_data[i] >= '0' && key_data[i] <= '9')
 							{
@@ -293,13 +283,12 @@ bool _toml::key(std::string key)
 									i++;
 								}
 							}
-							temp = key_data;
-							temp.erase(0, i);
-							return eos(temp);
+							return eos(key_data, i);
 						}
 						//binary
 						else if (key_data.length() >= 3 && key_data[0] == '0' && key_data[1] == 'b')
 						{
+							type = TOML_NUMBER | TOML_NUMBER_BINARY;
 							uint32 i = 2;
 							k += "0b";
 							while (key_data.length() >= i && (key_data[i] >= '0' && key_data[i] <= '1' || key_data[i] == '_'))
@@ -307,13 +296,12 @@ bool _toml::key(std::string key)
 								k += key_data[i];
 								i++;
 							}
-							temp = key_data;
-							temp.erase(0, i);
-							return eos(temp);
+							return eos(key_data, i);
 						}
 						//octal
 						else if (key_data.length() >= 3 && key_data[0] == '0' && key_data[1] == 'o')
 						{
+							type = TOML_NUMBER | TOML_NUMBER_OCTAL;
 							uint32 i = 2;
 							k += "0o";
 							while (key_data.length() >= i && (key_data[i] >= '0' && key_data[i] <= '7' || key_data[i] == '_'))
@@ -321,13 +309,12 @@ bool _toml::key(std::string key)
 								k += key_data[i];
 								i++;
 							}
-							temp = key_data;
-							temp.erase(0, i);
-							return eos(temp);
+							return eos(key_data, i);
 						}
 						//hexadecinal
 						else if (key_data.length() >= 3 && key_data[0] == '0' && key_data[1] == 'x')
 						{
+							type = TOML_NUMBER | TOML_NUMBER_HEXADECIMAL;
 							uint32 i = 2;
 							k += "0x";
 							while (key_data.length() >= i && (key_data[i] >= '0' && key_data[i] <= '9' || key_data[i] >= 'a' && key_data[i] <= 'f' || key_data[i] >= 'A' && key_data[i] <= 'F' || key_data[i] == '_'))
@@ -335,13 +322,12 @@ bool _toml::key(std::string key)
 								k += key_data[i];
 								i++;
 							}
-							temp = key_data;
-							temp.erase(0, i);
-							return eos(temp);
+							return eos(key_data, i);
 						}
 						//-binary
 						else if (key_data.length() >= 4 && key_data[0] == '-' && key_data[1] == '0' && key_data[2] == 'b')
 						{
+							type = TOML_NUMBER | TOML_NUMBER_BINARY | TOML_NUMBER_NEGATIVE;
 							uint32 i = 3;
 							k += "-0b";
 							while (key_data.length() >= i && (key_data[i] >= '0' && key_data[i] <= '1' || key_data[i] == '_'))
@@ -349,13 +335,12 @@ bool _toml::key(std::string key)
 								k += key_data[i];
 								i++;
 							}
-							temp = key_data;
-							temp.erase(0, i);
-							return eos(temp);
+							return eos(key_data, i);
 						}
 						//-octal
 						else if (key_data.length() >= 4 && key_data[0] == '-' && key_data[1] == '0' && key_data[2] == 'o')
 						{
+							type = TOML_NUMBER | TOML_NUMBER_OCTAL | TOML_NUMBER_NEGATIVE;
 							uint32 i = 3;
 							k += "-0o";
 							while (key_data[i] >= '0' && key_data[i] <= '7' || key_data[i] == '_')
@@ -363,13 +348,12 @@ bool _toml::key(std::string key)
 								k += key_data[i];
 								i++;
 							}
-							temp = key_data;
-							temp.erase(0, i);
-							return eos(temp);
+							return eos(key_data, i);
 						}
 						//-hexadecinal
 						else if (key_data.length() >= 4 && key_data[0] == '-' && key_data[1] == '0' && key_data[2] == 'x')
 						{
+							type = TOML_NUMBER | TOML_NUMBER_HEXADECIMAL | TOML_NUMBER_NEGATIVE;
 							uint32 i = 3;
 							k += "-0x";
 							while (key_data[i] >= '0' && key_data[i] <= '9' || key_data[i] >= 'a' && key_data[i] <= 'f' || key_data[i] >= 'A' && key_data[i] <= 'F' || key_data[i] == '_')
@@ -377,20 +361,21 @@ bool _toml::key(std::string key)
 								k += key_data[i];
 								i++;
 							}
-							temp = key_data;
-							temp.erase(0, i);
-							return eos(temp);
+							return eos(key_data, i);
 						}
 						else
 						{
+							type = TOML_NUMBER;
 							uint32 i = 0;
 							if (key_data[0] == '+')
 							{
+								type |= TOML_NUMBER_POSITIVE;
 								k += '+';
 								i++;
 							}
 							else if (key_data[0] == '-')
 							{
+								type |= TOML_NUMBER_NEGATIVE;
 								k += '-';
 								i++;
 							}
@@ -401,12 +386,11 @@ bool _toml::key(std::string key)
 								k += key_data[i];
 								i++;
 							}
-							if (key_data.length() == i || key_data[i] == ' ' || key_data[i] == '\t' || key_data[i] == '\n' || key_data[i] == '\r')
+							if (key_data.length() >= i || key_data[i] == ' ' || key_data[i] == '\t' || key_data[i] == '\n' || key_data[i] == '\r')
 							{
 								//int 
-								temp = key_data;
-								temp.erase(0, i);
-								return eos(temp);
+								type |= TOML_NUMBER_DECIMAL;
+								return eos(key_data, i);
 							}
 							else if (key_data[i] == '.')
 							{
@@ -419,13 +403,13 @@ bool _toml::key(std::string key)
 								if (key_data.length() == i || key_data[i] == ' ' || key_data[i] == '\t' || key_data[i] == '\n' || key_data[i] == '\r')
 								{
 									//float 3.14
-									temp = key_data;
-									temp.erase(0, i);
-									return eos(temp);
+									type |= TOML_NUMBER_FLOATING;
+									return eos(key_data, i);
 								}
 								else if (key_data[i] == 'E' || key_data[i] == 'e')
 								{
 									//float 3.14e+20
+									type |= TOML_NUMBER_FLOATING|TOML_NUMBER_EXPONENT;
 									k += key_data[i];
 									i++;
 									if(key_data[i] >= '0' && key_data[i] <= '9' || key_data[i] == '+' || key_data[i] == '-')
@@ -435,14 +419,13 @@ bool _toml::key(std::string key)
 										k += key_data[i];
 										i++;
 									}
-									temp = key_data;
-									temp.erase(0, i);
-									return eos(temp);
+									return eos(key_data, i);
 								}
 							}
 							else if (key_data[i] == 'E' || key_data[i] == 'e')
 							{
 								//int 15e426
+								type |= TOML_NUMBER_DECIMAL | TOML_NUMBER_EXPONENT;
 								k += key_data[i];
 								i++;
 								if (key_data[i] >= '0' && key_data[i] <= '9' || key_data[i] == '+' || key_data[i] == '-')
@@ -452,9 +435,7 @@ bool _toml::key(std::string key)
 									k += key_data[i];
 									i++;
 								}
-								temp = key_data;
-								temp.erase(0, i);
-								return eos(temp);
+								return eos(key_data, i);
 							}
 							else
 							{
@@ -490,9 +471,7 @@ bool _toml::key(std::string key)
 								}
 								else if (key_data[i] == '"' && c == 0)
 								{
-									temp = key_data;
-									temp.erase(0, i+1);
-									return eos(temp);
+									return eos(key_data, i+1);
 								}
 								else if(c)
 								{
@@ -537,9 +516,7 @@ bool _toml::key(std::string key)
 								}
 								else if (key_data[i] == '\'')
 								{
-									temp = key_data;
-									temp.erase(0, i+1);
-									return eos(temp);
+									return eos(key_data, i+1);
 								}
 								else
 								{
@@ -558,6 +535,14 @@ bool _toml::key(std::string key)
 	return false;
 }
 
+
+
+uint16 _toml::get_type(void)
+{
+	return type;
+}
+
+
 std::string _toml::get(void)
 {
 	if (!is_setting_up) return "NULL";
@@ -571,38 +556,9 @@ std::string _toml::get(void)
 int64 _toml::get_int(void)
 {
 	if (!is_setting_up) return 0;
-	int64 result = 0;
-	std::string temp = k;
-	try
-	{
-		if (((temp[0] == '0' && (temp[1] == 'b' || temp[1] == 'o' || temp[1] == 'x')) || (temp[0] == '-' && temp[1] == '0' && (temp[2] == 'b' || temp[2] == 'o' || temp[2] == 'x' ))) && temp.length() >= 3)
-		{
-			if (temp[1] == 'b' || temp[2] == 'b')
-			{
-				temp.erase(temp.find_first_of('0'), 2);
-				result = stoll(temp, 0, 2);
-			}
-			else if (temp[1] == 'o' || temp[2] == 'o')
-			{
-				temp.erase(temp.find_first_of('0'), 2);
-				result = stoll(temp, 0, 8);
-			}
-			else if (temp[1] == 'x' || temp[2] == 'x')
-			{
-				temp.erase(temp.find_first_of('0'), 2);
-				result = stoll(temp, 0, 16);
-			}
-		}
-		else
-		{
-			result = stoll(temp);
-		}
-	}
-	catch (...)
-	{
-		result = 0;
-	}
-	return result;
+	int64 result;
+	if (get_int(result))return result;
+	else return 0;
 }
 
 bool _toml::get_int(int64& result)
@@ -611,35 +567,40 @@ bool _toml::get_int(int64& result)
 	std::string temp = k;
 	try
 	{
-		if (((temp[0] == '0' && (temp[1] == 'b' || temp[1] == 'o' || temp[1] == 'x')) || (temp[0] == '-' && temp[1] == '0' && (temp[2] == 'b' || temp[2] == 'o' || temp[2] == 'x'))) && temp.length() >= 3)
+		if (((type & TOML_TYPE) == TOML_NUMBER) && (!(type & TOML_NUMBER_EXPONENT)))
 		{
-			if (temp[1] == 'b' || temp[2] == 'b')
+			if (type & TOML_NUMBER_BINARY)
 			{
 				temp.erase(temp.find_first_of('0'), 2);
 				result = stoll(temp, 0, 2);
+				return true;
 			}
-			else if (temp[1] == 'o' || temp[2] == 'o')
+			else if (type & TOML_NUMBER_OCTAL)
 			{
 				temp.erase(temp.find_first_of('0'), 2);
 				result = stoll(temp, 0, 8);
+				return true;
 			}
-			else if (temp[1] == 'x' || temp[2] == 'x')
+			else if (type & TOML_NUMBER_HEXADECIMAL)
 			{
 				temp.erase(temp.find_first_of('0'), 2);
 				result = stoll(temp, 0, 16);
+				return true;
+			}
+			else if (type & TOML_NUMBER_DECIMAL)
+			{
+				result = stoll(temp);
+				return true;
 			}
 		}
-		else
-		{
-			result = stoll(temp);
-		}
+		result = 0;
+		return false;
 	}
 	catch (...)
 	{
 		result = 0;
 		return false;
 	}
-	return true;
 }
 
 
@@ -647,38 +608,9 @@ bool _toml::get_int(int64& result)
 uint64 _toml::get_uint(void)
 {
 	if (!is_setting_up) return 0;
-	uint64 result = 0;
-	std::string temp = k;
-	try
-	{
-		if ((temp[0] == '0' && (temp[1] == 'b' || temp[1] == 'o' || temp[1] == 'x')) && temp.length() >= 3)
-		{
-			if (temp[1] == 'b' || temp[2] == 'b')
-			{
-				temp.erase(0, 2);
-				result = stoll(temp, 0, 2);
-			}
-			else if (temp[1] == 'o' || temp[2] == 'o')
-			{
-				temp.erase(0, 2);
-				result = stoll(temp, 0, 8);
-			}
-			else if (temp[1] == 'x' || temp[2] == 'x')
-			{
-				temp.erase(1, 2);
-				result = stoll(temp, 0, 16);
-			}
-		}
-		else
-		{
-			result = stoll(temp);
-		}
-	}
-	catch (...)
-	{
-		result = 0;
-	}
-	return result;
+	uint64 result;
+	if (get_uint(result))return result;
+	else return 0;
 }
 
 bool _toml::get_uint(uint64 &result)
@@ -687,64 +619,68 @@ bool _toml::get_uint(uint64 &result)
 	std::string temp = k;
 	try
 	{
-		if ((temp[0] == '0' && (temp[1] == 'b' || temp[1] == 'o' || temp[1] == 'x')) && temp.length() >= 3)
+		if (((type & TOML_TYPE) == TOML_NUMBER) && (!(type & TOML_NUMBER_NEGATIVE)) && (!(type & TOML_NUMBER_EXPONENT)))
 		{
-			if (temp[1] == 'b' || temp[2] == 'b')
+			if (type & TOML_NUMBER_BINARY)
 			{
 				temp.erase(temp.find_first_of('0'), 2);
 				result = stoll(temp, 0, 2);
+				return true;
 			}
-			else if (temp[1] == 'o' || temp[2] == 'o')
+			else if (type & TOML_NUMBER_OCTAL)
 			{
 				temp.erase(temp.find_first_of('0'), 2);
 				result = stoll(temp, 0, 8);
+				return true;
 			}
-			else if (temp[1] == 'x' || temp[2] == 'x')
+			else if (type & TOML_NUMBER_HEXADECIMAL)
 			{
 				temp.erase(temp.find_first_of('0'), 2);
 				result = stoll(temp, 0, 16);
+				return true;
+			}
+			else if (type & TOML_NUMBER_DECIMAL)
+			{
+				result = stoll(temp);
+				return true;
 			}
 		}
-		else
-		{
-			result = stoll(temp);
-		}
+		result = 0;
+		return false;
 	}
 	catch (...)
 	{
 		result = 0;
 		return false;
 	}
-	return true;
 }
 
 
 
 bool _toml::get_bit(void)
 {
-	if (k == "true")
-		return true;
-	else if (k == "false")
-		return false;
-	else
-		return false;
+	if (!is_setting_up) return 0;
+	bool result;
+	if (get_bit(result))return result;
+	else return 0;
 }
 
 bool _toml::get_bit(bool& result)
 {
-	if (k == "true")
+	if (!is_setting_up) return 0;
+	if (((type & TOML_TYPE) == TOML_SPECIAL) && (type & TOML_SPECIAL_BOOL))
 	{
-		result = true;
-		return true;
+		if (k == "true")
+		{
+			result = true;
+			return true;
+		}
+		else if (k == "false")
+		{
+			result = false;
+			return true;
+		}
 	}
-	else if (k == "false")
-	{
-		result = false;
-		return true;
-	}
-	else
-	{
-		result = false;
-		return false;
-	}
+	result = false;
+	return false;
 }
