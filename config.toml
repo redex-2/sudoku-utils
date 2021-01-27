@@ -14,12 +14,14 @@ int = -214748364
 port = 2147483649 #comment
 en = false
 
-[server]#connection
+[server]
 
 ip = "198.51.100.60"	#ip adress
 key = 123
 user = "redex2"
 pass = "qwerty123"
+ipv6 = true
+ipv4=false
 
 [client]
 
