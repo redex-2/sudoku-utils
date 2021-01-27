@@ -567,7 +567,7 @@ bool _toml::get_int(int64& result)
 	std::string temp = k;
 	try
 	{
-		if (((type & TOML_TYPE) == TOML_NUMBER) && (!(type & TOML_NUMBER_EXPONENT)))
+		if ((type & TOML_NUMBER) && (!(type & TOML_NUMBER_EXPONENT)))
 		{
 			if (type & TOML_NUMBER_BINARY)
 			{
@@ -619,7 +619,7 @@ bool _toml::get_uint(uint64 &result)
 	std::string temp = k;
 	try
 	{
-		if (((type & TOML_TYPE) == TOML_NUMBER) && (!(type & TOML_NUMBER_NEGATIVE)) && (!(type & TOML_NUMBER_EXPONENT)))
+		if ((type & TOML_NUMBER) && (!(type & TOML_NUMBER_NEGATIVE)) && (!(type & TOML_NUMBER_EXPONENT)))
 		{
 			if (type & TOML_NUMBER_BINARY)
 			{
@@ -668,7 +668,7 @@ bool _toml::get_bit(void)
 bool _toml::get_bit(bool& result)
 {
 	if (!is_setting_up) return 0;
-	if (((type & TOML_TYPE) == TOML_SPECIAL) && (type & TOML_SPECIAL_BOOL))
+	if ((type & TOML_SPECIAL) && (type & TOML_SPECIAL_BOOL))
 	{
 		if (k == "true")
 		{
