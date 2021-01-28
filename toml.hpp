@@ -21,10 +21,10 @@
 #define TOML_UNDEFINED					0
 
 //types
-#define TOML_NUMBER						(0b0001000000000000)
-#define TOML_SPECIAL					(0b0010000000000000)
-#define TOML_ARRAY						(0b0100000000000000)
-#define TOML_TIME						(0b1000000000000000)
+#define TOML_NUMBER						(1<<12)
+#define TOML_SPECIAL					(1<<13)
+#define TOML_ARRAY						(1<<14)
+#define TOML_TIME						(1<<15)
 
 //number
 #define TOML_NUMBER_NEGATIVE			(1<<11)
