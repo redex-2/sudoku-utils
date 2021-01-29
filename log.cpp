@@ -5,7 +5,6 @@ int _log::setup(std::string filename)
 {
 	is_setting_up=1;
 	file=filename;
-	lock.unlock();
 	return 1;
 }
 
@@ -13,7 +12,6 @@ _log::_log(std::string filename)
 {
 	is_setting_up=1;
 	file=filename;
-	lock.unlock();
 	return;
 }
 
