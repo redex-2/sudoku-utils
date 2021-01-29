@@ -13,9 +13,9 @@
 //UNDEF |  0  |  0  |  0  |  0  |  X  |  X  |  X  |  X  |  X  |  X  |  X  |  X  |  X  |  X  |  X  |  X  |
 //number|  0  |  0  |  0  |  1  |  -  |  +  |  _  |FLOAT| BIN | OCT | DEC | HEX | EXP |  X  |  X  |  X  |
 //spec	|  0  |  0  |  1  |  0  |  -  |  +  | INF | NAN |BOOL |  X  |  X  |  X  |  X  |  X  |  X  |  X  |
-//str   |  0  |  1  |  0  |  0  |  0  |SINGL|MULTI|BASIC| LIT |  X  |  X  |  X  |  X  |  X  |  X  |  X  |
-//array |  0  |  1  |  0  |  0  |  1  |SINGL|MULTI|  X  |  X  |  X  |  X  |  X  |  X  |  X  |  X  |  X  |
-//time  |  1  |  0  |  0  |  0  |TIME | DATE| OFF |USE T|FLOAT|  X  |  X  |  X  |  X  |  X  |  X  |  X  |
+//array |  0  |  1  |  0  |  0  |  1  |  0  |SINGL|MULTI|  X  |  X  |  X  |  X  |  X  |  X  |  X  |  X  |
+//str   |  0  |  1  |  0  |  0  |  0  |  1  |SINGL|MULTI|BASIC| LIT |  X  |  X  |  X  |  X  |  X  |  X  |
+//time  |  1  |  0  |  0  |  0  |TIME | DATE| D-T | OFF |USE T|FLOAT|  X  |  X  |  X  |  X  |  X  |  X  |
 */
 
 #define TOML_UNDEFINED					0
@@ -45,8 +45,8 @@
 #define TOML_SPECIAL_BOOL				(1<<7)
 
 //array and string
-#define TOML_ARRAY_STRING				(0)
 #define TOML_ARRAY_ARRAY				(1<<11)
+#define TOML_ARRAY_STRING				(1<<10)
 #define TOML_ARRAY_ARRAY_SINGLE_LINE	(1<<9)
 #define TOML_ARRAY_STRING_SINGLE_LINE	(1<<9)
 #define TOML_ARRAY_ARRAY_MULTI_LINE		(1<<8)
@@ -57,10 +57,10 @@
 //time
 #define TOML_TIME_TIME					(1<<11)
 #define TOML_TIME_DATE					(1<<10)
-#define TOML_TIME_DATETIME				(TOML_TIME_TIME|TOML_TIME_DATE)
-#define TOML_TIME_OFFSET				(1<<9)
-#define TOML_TIME_USE_T_SEPARATOR		(1<<8)
-#define TOML_TIME_FLOATING_SECOND		(1<<7)
+#define TOML_TIME_DATETIME				(1<<9)
+#define TOML_TIME_OFFSET				(1<<8)
+#define TOML_TIME_USE_T_SEPARATOR		(1<<7)
+#define TOML_TIME_FLOATING_SECOND		(1<<6)
 
 
 

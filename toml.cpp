@@ -450,6 +450,7 @@ bool _toml::key(std::string key)
 						key_data.erase(0, 1);
 						if (key_data[0] == '"' && key_data[1] == '"')
 						{
+							type = TOML_ARRAY | TOML_ARRAY_STRING | TOML_ARRAY_STRING_MULTI_LINE | TOML_ARRAY_STRING_BASIC;
 							multiline_basic_string = 1;
 							//change multiline to single line
 							//TODO
@@ -457,6 +458,7 @@ bool _toml::key(std::string key)
 						}
 						else
 						{
+							type = TOML_ARRAY | TOML_ARRAY_STRING | TOML_ARRAY_ARRAY_SINGLE_LINE | TOML_ARRAY_STRING_BASIC;
 							uint32 i = 0;
 							bool c = 0;
 							while(1)
@@ -500,6 +502,7 @@ bool _toml::key(std::string key)
 						key_data.erase(0, 1);
 						if (key_data[0] == '\'' && key_data[1] == '\'')
 						{
+							type = TOML_ARRAY | TOML_ARRAY_STRING | TOML_ARRAY_STRING_MULTI_LINE | TOML_ARRAY_STRING_LITERAL;
 							multiline_literal_string = 1;
 							//change multiline to single line
 							//TODO
@@ -507,6 +510,7 @@ bool _toml::key(std::string key)
 						}
 						else
 						{
+							type = TOML_ARRAY | TOML_ARRAY_STRING | TOML_ARRAY_ARRAY_SINGLE_LINE | TOML_ARRAY_STRING_LITERAL;
 							uint32 i = 0;
 							while(1)
 							{
