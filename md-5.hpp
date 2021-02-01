@@ -8,13 +8,13 @@
 class _md5:protected _reverse_hash
 {
 	private:
-		uint16 i;
-		uint32** data;
+		uint16 i = 0;
+		uint32** data = NULL;
 		uint32 hash[4];
 		uint32 working[6];
 		uint32 word[16];
 		uint32 block_size = 512;
-		uint64 out_len, j;
+		uint64 out_len = 0, j = 0;
 		static const uint32 k[64];
 		static const uint16 s[64];
 		std::stringstream sstring;

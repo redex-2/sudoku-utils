@@ -66,7 +66,7 @@ bool _prime::miller_rabin(uint32 number)
         d/=2; 
 		
 	for(i=0; i < k; i++)
-		if (!miller_rabin_unit(d, number))
+		if (!miller_rabin_unit((uint32)d, number))
 			return false;
 	return true;
 }
@@ -80,7 +80,7 @@ bool _prime::standard(uint64 number)
 	if(number%2 == 0 
 		|| number < 11) return false;
 	
-	c = std::sqrt(number);
+	c = (uint64)std::sqrt(number);
 	n = 3;
 	while(number % n != 0)
 	{
@@ -112,11 +112,11 @@ uint16 _prime::check(uint64 number)
 	if(m==0 || number >= 0xFFFFFFFF)
 		return standard(number);
 	else if(m==1)
-		return miller_rabin(number);
+		return miller_rabin((uint32)number);
 	else if(m==2 && number < 0xFFFF)
 		return standard(number);
 	else
-		return miller_rabin(number)+1;
+		return miller_rabin((uint32)number)+1;
 }
 
 uint64 _prime::next(uint64 number)

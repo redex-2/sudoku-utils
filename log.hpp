@@ -12,8 +12,8 @@ class _log
 		bool is_setting_up=0;
 		std::fstream myfile;
 		std::mutex lock;
-		time_t u;
-		struct tm * ptm; 	//create time struct
+		time_t u = 0;
+		struct tm * ptm = NULL; 	//create time struct
 	public:
 		_log(std::string filename);
 		_log(void);

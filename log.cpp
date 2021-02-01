@@ -17,6 +17,7 @@ _log::_log(std::string filename)
 
 _log::_log(void)
 {
+	is_setting_up = 0;
 	return;
 }
 

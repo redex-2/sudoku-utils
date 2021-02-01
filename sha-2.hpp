@@ -13,9 +13,9 @@ class _sha256:protected _hash
 		uint32 working[15];
 		uint32 word[64];
 		uint32 hash[8];
-		uint32** data;
-		uint64 j, out_len;
-		uint16 i, l;
+		uint32** data = NULL;
+		uint64 j = 0, out_len = 0;
+		uint16 i = 0, l = 0;
 		uint32 block_size = 512;
 		std::stringstream sstring;
 		
