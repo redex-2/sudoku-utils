@@ -5,6 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <fstream>
+#include <mutex>
 //#include <codecvt>
 
 /*
@@ -73,6 +74,7 @@ class _toml
 		std::string s="";
 		std::string k="";
 		uint32 type = TOML_UNDEFINED;
+		std::mutex file_mutex;
 		
 		bool eos(std::string data, uint32 i);
 
@@ -99,6 +101,8 @@ class _toml
 
 		bool get_bit(void);
 		bool get_bit(bool &result);
+
+		std::mutex mutex;
 
 		//bool edit(std::string section, std::string key, std::string data);
 };
