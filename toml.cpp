@@ -35,7 +35,6 @@ bool _toml::eos(std::string data, uint32 i)
 bool _toml::section(std::string section)
 {
 	if (!is_setting_up) return false;
-	file_mutex.lock();
 	tomlfile.open(file, std::ios::in);
 	if (tomlfile.good())
 	{
@@ -63,7 +62,6 @@ bool _toml::section(std::string section)
 				{
 					tomlfile.close();
 					s = sstream.str();
-					file_mutex.unlock();
 					return true;
 				}
 				sstream << temp << std::endl;
@@ -71,16 +69,13 @@ bool _toml::section(std::string section)
 		}
 		tomlfile.close();
 		s = sstream.str();
-		file_mutex.unlock();
 		return true;
 	}
-	file_mutex.unlock();
 	return false;
 }
 
 bool _toml::section(void)
 {
-	file_mutex.lock();
 	tomlfile.open(file, std::ios::in);
 	if (tomlfile.good())
 	{
@@ -96,7 +91,6 @@ bool _toml::section(void)
 				{
 					tomlfile.close();
 					s = sstream.str();
-					file_mutex.unlock();
 					return true;
 				}
 				sstream << temp << std::endl;
@@ -104,10 +98,8 @@ bool _toml::section(void)
 		}
 		tomlfile.close();
 		s = sstream.str();
-		file_mutex.unlock();
 		return true;
 	}
-	file_mutex.unlock();
 	return false;
 }
 

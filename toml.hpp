@@ -74,7 +74,6 @@ class _toml
 		std::string s="";
 		std::string k="";
 		uint32 type = TOML_UNDEFINED;
-		std::mutex file_mutex;
 		
 		bool eos(std::string data, uint32 i);
 
