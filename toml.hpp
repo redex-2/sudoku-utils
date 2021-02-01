@@ -5,6 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <fstream>
+#include <mutex>
 //#include <codecvt>
 
 /*
@@ -99,6 +100,8 @@ class _toml
 
 		bool get_bit(void);
 		bool get_bit(bool &result);
+
+		std::mutex mutex;
 
 		//bool edit(std::string section, std::string key, std::string data);
 };
