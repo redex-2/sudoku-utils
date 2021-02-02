@@ -6,7 +6,7 @@ test = "second line of without section"
 
 time = 2020-01-01T07:32:00+00:00 #random time
 
-[database]
+[database]#comment
 
 us .	er = 'root'#comment to delete
 pass = "secret"

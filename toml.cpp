@@ -44,16 +44,38 @@ bool _toml::section(std::string section)
 		bool c = 0;
 		while (std::getline(tomlfile, temp))
 		{
-			temp.erase(std::remove(temp.begin(), temp.end(), ' '), temp.end());
-			temp.erase(std::remove(temp.begin(), temp.end(), '\t'), temp.end());
-			if (temp == "[" + section + "]" || temp == "[" + section + "]" + '\r')
+			uint32 pos = temp.find_first_not_of(" \t\r\n");
+			if (pos != 0xFFFFFFFF && temp[pos] == '[')
 			{
-				break;
-				c = 1;
+				uint32 i = pos + 1;
+				while (i <= temp.length())
+				{
+					if (temp[i] == section[i-1-pos])
+					{
+						i++;
+					}
+					else if (temp[i] == ']')
+					{
+						if (eos(temp, i+1))
+						{
+							c = 1;
+							break;
+						}
+						else
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+				if (c) break;
 			}
 		}
-		if (c) return false;
-		while (std::getline(tomlfile, temp))
+		if (!c) return false;
+		while (std::getline(tomlfile, temp))//find end of section
 		{
 			uint32 pos = temp.find_first_not_of(" \t\r\n");
 			if (pos != 0xFFFFFFFF && temp[pos] != '#')
