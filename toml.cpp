@@ -34,6 +34,7 @@ bool _toml::eos(std::string data, uint32 i)
 
 bool _toml::section(std::string section)
 {
+	uint32 pos = section.find_first_not_of(" \t\r\n");
 	if (!is_setting_up) return false;
 	tomlfile.open(file, std::ios::in);
 	if (tomlfile.good())
@@ -489,11 +490,11 @@ bool _toml::key(std::string key)
 								{
 									return false;
 								}
-								if (key_data[i] == '\\')
+								if (key_data[i] == '\\' && !c)
 								{
 									c = !c;
 								}
-								else if (key_data[i] == '"' && c == 0)
+								else if (key_data[i] == '"' && !c)
 								{
 									return eos(key_data, i+1);
 								}
