@@ -35,6 +35,86 @@ bool _toml::eos(std::string data, uint32 i)
 bool _toml::section(std::string section)
 {
 	uint32 pos = section.find_first_not_of(" \t\r\n");
+	if (pos != -1)
+	{
+		bool quotation = false;
+		bool single = false;
+		bool c = false;
+		section.erase(0, pos);
+		uint32 i = 0;
+		if (section[i] == '"' && single == false)
+		{
+			quotation = 1;
+			section.erase(0, 1);
+			if (section.find_first_of('"') == -1) return false;
+		}
+		else if (i == '\'')
+		{
+			quotation = 1;
+			single = true;
+			section.erase(0, 1);
+			if (section.find_first_of('\'') == -1) return false;
+		}
+		while (1)
+		{
+			if (section[i] == '"')
+			{
+				if (quotation && !single)
+				{
+					quotation = false;
+					single = false;
+				}
+			}
+			else if (i == '\'')
+			{
+				if (quotation && single)
+				{
+					quotation = false;
+					single = false;
+				}
+			}
+			else
+				break;
+			if (quotation)
+			{
+				if (i > section.length())
+				{
+					break;
+				}
+				else if (section[i] == '\\' && !c)
+				{
+					section.erase(i, 1);
+					c = !c;
+				}
+				else if (section[i] == '"' && !c)
+				{
+					return eos(section, i + 1);
+				}
+				else if (c)
+				{
+					c = 0;
+					if (section[i] == 'b') { section.insert(i, 1, '\b'); }
+					else if (section[i] == 't') { section.insert(i, 1, '\t'); }
+					else if (section[i] == 'n') { section.insert(i, 1, '\n'); }
+					else if (section[i] == 'f') { section.insert(i, 1, '\f'); }
+					else if (section[i] == 'r') { section.insert(i, 1, '\r'); }
+					else if (section[i] == '"') { section.insert(i, 1, '"'); }
+					else if (section[i] == '\\') { section.insert(i, 1, '\\'); }
+					else if (section[i] == 'u') { section.insert(i, "\\u"); }
+					else if (section[i] == 'U') { section.insert(i, "\\U"); }
+					i++;
+				}
+				else
+				{
+					i++;
+				}
+			}
+		}
+	}
+	else
+	{
+		return false;
+	}
 	if (!is_setting_up) return false;
 	tomlfile.open(file, std::ios::in);
 	if (tomlfile.good())
